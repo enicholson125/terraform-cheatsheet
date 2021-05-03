@@ -1,0 +1,4 @@
+TODO
+ - Make separate website hosting cheatsheet
+ - Pull terraform examples in from .tf files
+ - Run terraform validate against example .tf files in CI
