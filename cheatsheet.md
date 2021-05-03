@@ -52,11 +52,41 @@ resource "aws_iam_user" "example" {
   name = var.user_names[count.index]
 }
 ```
-Better to use for_each: count makes the resource addresses less readable and will recreate all the resources if you remove the first one in the array.
+Better in general to use for_each: count makes the resource addresses less readable and will recreate all the resources if you remove the first one in the array.
 ```
 resource "aws_iam_user" "test_env_only" {
   count = var.env == "test" ? 1 : 0
   name = "test-only"
+}
+
+output "test_env_only" {
+  value = aws_iam_user.test_env_only[0]
+}
+```
+### For
+Lists:
+```
+variable "favourite_vegetables" {
+  default = ["Artichoke", "Broccoli", "Potato"]
+}
+
+# Outputs ["Artichoke is great.", "Broccoli is great.", "Potato is great."]
+output "vegetable_statements" {
+  value = [for veg in var.favourite_vegetables : "${veg} is great."]
+}
+```
+Maps:
+```
+variable "vegetable_opinions" {
+  default = {
+    artichoke = "great"
+    cauliflower = "terrible"
+  }
+}
+
+# Outputs {"ARTICHOKE" = "GREAT", "CAULIFLOWER" = "TERRIBLE"}
+output "uppercase_opinions" {
+  value = {for veg, opinion in var.vegetable_opinions : upper(veg) => upper(opinion)}
 }
 ```
 ### Splat
@@ -72,13 +102,31 @@ output "all_user_arns" {
   value = values(aws_iam_user.example[*].arn)
 }
 ```
+### For in strings (string directive)
+```
+variable "fruits" {
+  default = ["apple", "tangerine", "mango"]
+}
+
+# Outputs (each on a new line):
+# apple
+# tangerine
+# mango
+output "string_directive" {
+  value = <<EOF
+%{~ for fruit in var.fruits } # ~ strips empty newlines and whitespace
+  ${fruit}
+%{~ endfor }
+EOF
+}
+```
 ## Ternary
 ```
 resource "aws_iam_user" "ternary" {
   name = var.env == "prod" ? "prod-user" : "test-user"
 }
 ```
-## String templating
+## String interpolations (templating)
 ```
 variable "your_variable" {
   default = "set-me-to-anything"
