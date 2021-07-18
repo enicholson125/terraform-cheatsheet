@@ -1,4 +1,5 @@
 TODO
  - Make separate website hosting cheatsheet
- - Pull terraform examples in from .tf files
- - Run terraform validate against example .tf files in CI
+ - Finish pulling examples into their own terraform files
+ - Set up circleCI
+ - Tidy up examples - use a single theme and don't require cloud creds for provider

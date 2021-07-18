@@ -1,0 +1,26 @@
+version: 2.1
+
+jobs:
+  # TODO deploy up-to-date cheatsheet
+  deploy:
+    docker:
+      - image: circleci/<language>:<version TAG>
+    steps:
+      - checkout
+      - run: echo "this is the build job"
+  # TODO Generate cheatsheet and check it matches checked-in version
+  # TODO Check all terraform is valid and formatted
+  test:
+    docker:
+      - image: circleci/<language>:<version TAG>
+    steps:
+      - checkout
+      - run: echo "this is the test job"
+
+workflows:
+  test_and_deploy:
+    jobs:
+      - test
+      - deploy:
+          requires:
+            - test
