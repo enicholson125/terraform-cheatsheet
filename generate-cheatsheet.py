@@ -9,15 +9,15 @@ def add_code_block(code: str):
 
 
 def add_top_heading(heading: str):
-    return f"#{heading}\n"
+    return f"# {heading}\n"
 
 
 def add_second_heading(heading: str):
-    return f"##{heading}\n"
+    return f"## {heading}\n"
 
 
 def add_third_heading(heading: str):
-    return f"###{heading}\n"
+    return f"### {heading}\n"
 
 
 def add_text(text: str):

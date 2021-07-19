@@ -1,5 +1,5 @@
 {
-    "HCL/Terraform config cheatsheet": {
+    "Terraform config cheatsheet": {
         "Loops": {
             "for_each": {
                 "Creating multiple resources with for_each:": "for_each_resources.tf",

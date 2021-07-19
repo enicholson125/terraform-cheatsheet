@@ -1,6 +1,6 @@
-#HCL/Terraform config cheatsheet
-##Loops
-###for_each
+# Terraform config cheatsheet
+## Loops
+### for_each
 Creating multiple resources with for_each:
 ```
 variable "iterator" {
@@ -48,7 +48,7 @@ resource "google_compute_firewall" "inline_blocks_example" {
 }
 
 ```
-###count
+### count
 Better in general to use for_each as count makes the resources addresses less readable and will recreate all the resources if you remove the first one in the array (as their index will have changed). However, if you do want to use it:
 ```
 variable "user_names" {
@@ -73,7 +73,7 @@ output "test_env_only" {
 }
 
 ```
-###for
+### for
 Iterating over lists with for:
 ```
 variable "favourite_vegetables" {
@@ -101,7 +101,7 @@ output "uppercase_opinions" {
 }
 
 ```
-###splat
+### splat
 Splat with resources created using count:
 ```
 output "all_user_arns" {
@@ -139,7 +139,7 @@ EOF
 }
 
 ```
-##Ternary
+## Ternary
 Very useful for flagging based on environments:
 ```
 resource "aws_iam_user" "ternary" {
@@ -147,7 +147,7 @@ resource "aws_iam_user" "ternary" {
 }
 
 ```
-##String interpolations (templating)
+## String interpolations (templating)
 If the value you're interpolating is an attribute of a resource then Terraform will infer the dependency between the two, that is it won't try to build the resource containing the interpolation until it has built the resource that is referenced.
 ```
 variable "your_variable" {
@@ -160,7 +160,7 @@ resource "aws_iam_user" "string_templating" {
 }
 
 ```
-##JSON encoding
+## JSON encoding
 This is particularly if you're working in AWS, as it makes writing IAM policies neater
 ```
 resource "aws_iam_policy" "policy" {
