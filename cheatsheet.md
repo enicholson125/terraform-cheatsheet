@@ -14,7 +14,6 @@ resource "local_file" "for_each_example" {
 }
 
 output "local_files_created" {
-
   value = local_file.for_each_example # Will output a map of the files, keyed by var.iterator
 }
 
