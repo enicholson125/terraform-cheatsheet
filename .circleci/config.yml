@@ -4,23 +4,23 @@ jobs:
   # TODO deploy up-to-date cheatsheet
   deploy:
     docker:
-      - image: circleci/<language>:<version TAG>
+      - image: python:latest
     steps:
       - checkout
-      - run: echo "this is the build job"
+      - run: python generate-cheatsheet.py
   # TODO Generate cheatsheet and check it matches checked-in version
   # TODO Check all terraform is valid and formatted
   test:
     docker:
-      - image: circleci/<language>:<version TAG>
+      - image: python:latest
     steps:
       - checkout
-      - run: echo "this is the test job"
+      - run: python generate-cheatsheet.py
 
 workflows:
   test_and_deploy:
     jobs:
       - test
-      - deploy:
-          requires:
-            - test
+      # - deploy:
+      #     requires:
+      #       - test
