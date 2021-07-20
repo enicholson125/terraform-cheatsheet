@@ -18,8 +18,8 @@ jobs:
       - run:
           name: linting
           command: |
-            sudo pip install pylint
-            pylint
+            pip install flake8
+            flake8
       - run:
           name: check_cheatsheet_generation
           command: |
@@ -30,16 +30,7 @@ jobs:
       - image: python:latest
     steps:
       - checkout
-      - run:
-          name: linting
-          command: |
-            sudo pip install pylint
-            pylint
-      - run:
-          name: check_cheatsheet_generation
-          command: |
-            python generate-cheatsheet.py > test-cheatsheet.md
-            diff test-cheatsheet.md cheatsheet.md
+      - run: echo "TODO"
 
 workflows:
   test_and_deploy:
