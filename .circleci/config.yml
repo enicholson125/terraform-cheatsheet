@@ -15,6 +15,7 @@ jobs:
       - image: python:latest
     steps:
       - checkout
+      - run: pylint
       - run: python generate-cheatsheet.py
 
 workflows:
