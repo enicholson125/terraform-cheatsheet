@@ -10,18 +10,42 @@ jobs:
       - run: python generate-cheatsheet.py
   # TODO Generate cheatsheet and check it matches checked-in version
   # TODO Check all terraform is valid and formatted
-  test:
+  test_cheatsheet_generation:
     docker:
       - image: python:latest
     steps:
       - checkout
-      - run: pylint
-      - run: python generate-cheatsheet.py
+      - run:
+          name: linting
+          command: |
+            sudo pip install pylint
+            pylint
+      - run:
+          name: check_cheatsheet_generation
+          command: |
+            python generate-cheatsheet.py > test-cheatsheet.md
+            diff test-cheatsheet.md cheatsheet.md
+  test_tf_examples:
+    docker:
+      - image: python:latest
+    steps:
+      - checkout
+      - run:
+          name: linting
+          command: |
+            sudo pip install pylint
+            pylint
+      - run:
+          name: check_cheatsheet_generation
+          command: |
+            python generate-cheatsheet.py > test-cheatsheet.md
+            diff test-cheatsheet.md cheatsheet.md
 
 workflows:
   test_and_deploy:
     jobs:
-      - test
+      - test_cheatsheet_generation
+      - test_tf_examples
       # - deploy:
       #     requires:
       #       - test

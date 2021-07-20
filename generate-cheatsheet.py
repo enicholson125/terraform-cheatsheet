@@ -62,10 +62,5 @@ def generate_cheatsheet_text():
     return cheatsheet
 
 
-def write_to_cheatsheet_file(cheatsheet_text: str):
-    with open(CHEATSHEET_NAME, 'w') as file:
-        file.write(cheatsheet_text)
-
-
 if __name__ == "__main__":
-    write_to_cheatsheet_file(generate_cheatsheet_text())
+    print(generate_cheatsheet_text())
