@@ -17,10 +17,13 @@
                 "Splat with resources created using count:": "splat_count.tf",
                 "Splat with resources created using for_each": "splat_for_each.tf"
             },
-            "For in strings (string directive)": "for_string_directive.tf"
+            "Using for within a string (string directive)": "for_string_directive.tf"
         },
         "Ternary": {
             "Very useful for flagging based on environments:": "ternary.tf"
+        },
+        "Get path of module": {
+            "Path to the module that this configuration is in:": "path_to_module.tf"
         },
         "String interpolations (templating)": {
             "If the value you're interpolating is an attribute of a resource then Terraform will infer the dependency between the two, that is it won't try to build the resource containing the interpolation until it has built the resource that is referenced.": "string_interpolation.tf"

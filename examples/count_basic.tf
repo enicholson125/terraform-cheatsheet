@@ -1,8 +1,9 @@
-variable "user_names" {
-  default = ["boyle", "holt", "diaz"]
+variable "string_lengths" {
+  default = [2, 5, 1]
 }
 
-resource "aws_iam_user" "example" {
-  count = length(var.user_names)
-  name = var.user_names[count.index]
+resource "random_string" "count_basic" {
+  count = length(var.string_lengths)
+
+  length = var.string_lengths[count.index]
 }

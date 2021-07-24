@@ -1,26 +1,32 @@
-variable "allow_rules" {
+variable "zip_sources" {
   default = {
-    "first_rule" = {
-      "ports" = [8080, 80],
-      "protocol" = "tcp"
-    },
-    "second_rule" = {
-      "ports" = null
-      "protocol" = "icmp"
+    first_source = {
+      source_content = "Some text in my first source"
+      filename = "first_source.txt"
+    }
+
+    second_source = {
+      source_content = "Some text in my second source."
+      filename = "second_source.txt"
     }
   }
 }
 
-resource "google_compute_firewall" "inline_blocks_example" {
-  name = "example"
-  network = "my-network"
+data "archive_file" "inline_block_example" {
+  type        = "zip"
+  output_path = "example.zip"
 
-  dynamic "allow" {
-    for_each = var.allow_rules
+  # Generates two inline blocks of the form:
+  # source {
+  #   content = <content>
+  #   filename = <filename>
+  # }
+  dynamic "source" {
+    for_each = var.zip_sources
 
     content {
-      ports = allow.value["ports"]
-      protocol = allow.value["protocol"]
+      content = source.value["source_content"]
+      filename = source.value["filename"]
     }
   }
 }

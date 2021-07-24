@@ -6,9 +6,9 @@ variable "fruits" {
 # apple
 # tangerine
 # mango
-output "string_directive" {
+output "for_within_string" {
   value = <<EOF
-%{~ for fruit in var.fruits } # ~ strips empty newlines and whitespace
+%{~ for fruit in var.fruits } # ~ character strips empty newlines and whitespace
   ${fruit}
 %{~ endfor }
 EOF
