@@ -13,7 +13,7 @@
                 "Iterating over lists with for:": "for_lists.tf",
                 "Iterating over maps with for:": "for_maps.tf"
             },
-            "splat": {
+            "Referencing all resources created with a loop (splat)": {
                 "Splat with resources created using count:": "splat_count.tf",
                 "Splat with resources created using for_each": "splat_for_each.tf"
             },

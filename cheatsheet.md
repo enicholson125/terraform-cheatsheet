@@ -138,22 +138,43 @@ output "uppercase_opinions" {
 }
 
 ```
-### splat
+### Referencing all resources created with a loop (splat)
 Splat with resources created using count:
 ```
-output "all_user_arns" {
-  value = aws_iam_user.example[*].arn # Outputs a list of all the arns
+variable "string_lengths" {
+  default = [2, 5, 1]
+}
+
+resource "random_string" "splat_count" {
+  count = length(var.string_lengths)
+
+  length = var.string_lengths[count.index]
+}
+
+output "all_random_strings_created" {
+  # Outputs a list of all the random_strings created
+  value = random_string.splat_count[*].result
 }
 
 ```
 Splat with resources created using for_each
 ```
-resource "aws_iam_user" "example" {
-
+variable "iterator" {
+  default = [2, 5]
 }
 
-output "all_user_arns" {
-  value = values(aws_iam_user.example[*].arn)
+resource "random_string" "for_each_splat" {
+  for_each = toset(var.iterator)
+
+  length = each.value
+}
+
+output "map_of_resources_created" {
+  value = random_string.for_each_splat[*]
+}
+
+output "all_random_strings_created" {
+  value = values(random_string.for_each_splat[*].result)
 }
 
 ```
@@ -179,8 +200,17 @@ EOF
 ## Ternary
 Very useful for flagging based on environments:
 ```
-resource "aws_iam_user" "ternary" {
-  name = var.env == "prod" ? "prod-user" : "test-user"
+variable "environment" {
+  default = "prod"
+}
+
+resource "random_string" "longer_in_prod" {
+  name = var.env == "prod" ? 5 : 3
+}
+
+output "string_produced" {
+  # Will be 5 characters long
+  value = random_string.longer_in_prod.result
 }
 
 ```
@@ -195,13 +225,16 @@ output "module_path" {
 ## String interpolations (templating)
 If the value you're interpolating is an attribute of a resource then Terraform will infer the dependency between the two, that is it won't try to build the resource containing the interpolation until it has built the resource that is referenced.
 ```
-variable "your_variable" {
-  default = "set-me-to-anything"
-  type = string
+resource "random_string" "insertion" {
+  length = 7
 }
 
-resource "aws_iam_user" "string_templating" {
-  name = "${var.your_variable}-user"
+local {
+  my_string = "Random string value is ${random_string.insertion.result}"
+}
+
+output "my_string" {
+  value = local.my_string
 }
 
 ```

@@ -1,8 +1,11 @@
-variable "your_variable" {
-  default = "set-me-to-anything"
-  type = string
+resource "random_string" "insertion" {
+  length = 7
 }
 
-resource "aws_iam_user" "string_templating" {
-  name = "${var.your_variable}-user"
+local {
+  my_string = "Random string value is ${random_string.insertion.result}"
+}
+
+output "my_string" {
+  value = local.my_string
 }
