@@ -30,7 +30,12 @@ jobs:
       - image: python:latest
     steps:
       - checkout
-      - run: echo "TODO"
+      - run:
+          name: install tfswitch
+          command: curl -L https://raw.githubusercontent.com/warrensbox/terraform-switcher/release/install.sh | bash
+      - run:
+          name: check
+          command: scripts/check-terraform-examples.sh
 
 workflows:
   test_and_deploy:

@@ -3,12 +3,12 @@ variable "env" {
 }
 
 resource "random_string" "test_env_only" {
-  count = var.env == "test" ? 1 : 0
+  count  = var.env == "test" ? 1 : 0
   length = 5
 }
 
 resource "random_string" "prod_env_only" {
-  count = var.env == "prod" ? 1 : 0
+  count  = var.env == "prod" ? 1 : 0
   length = 5
 }
 

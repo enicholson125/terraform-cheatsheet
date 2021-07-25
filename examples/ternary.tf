@@ -1,9 +1,9 @@
-variable "environment" {
+variable "env" {
   default = "prod"
 }
 
 resource "random_string" "longer_in_prod" {
-  name = var.env == "prod" ? 5 : 3
+  length = var.env == "prod" ? 5 : 3
 }
 
 output "string_produced" {

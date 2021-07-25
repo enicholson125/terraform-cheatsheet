@@ -2,7 +2,7 @@ resource "random_string" "insertion" {
   length = 7
 }
 
-local {
+locals {
   my_string = "Random string value is ${random_string.insertion.result}"
 }
 

@@ -1,5 +1,5 @@
 variable "iterator" {
-  default = [2, 5]
+  default = ["2", "5"]
 }
 
 resource "random_string" "for_each_splat" {
@@ -10,8 +10,4 @@ resource "random_string" "for_each_splat" {
 
 output "map_of_resources_created" {
   value = random_string.for_each_splat[*]
-}
-
-output "all_random_strings_created" {
-  value = values(random_string.for_each_splat[*].result)
 }

@@ -8,8 +8,8 @@ variable "fruits" {
 # mango
 output "for_within_string" {
   value = <<EOF
-%{~ for fruit in var.fruits } # ~ character strips empty newlines and whitespace
+%{~for fruit in var.fruits} # ~ character strips empty newlines and whitespace
   ${fruit}
-%{~ endfor }
+%{~endfor}
 EOF
 }
