@@ -3,24 +3,14 @@
 ### for_each
 Creating multiple resources with for_each:
 ```
-# Could also iterate over [2, 5] directly, however
-# this could cause confusion as to whether the numbers
-# are an index rather than a key
 variable "iterator" {
-  default = ["short_string", "longer_string"]
-}
-
-variable "lengths" {
-  default = {
-    short_string = 2,
-    longer_string = 5
-  }
+  default = ["2", "5"]
 }
 
 resource "random_string" "for_each_example" {
   for_each = toset(var.iterator)
 
-  length = var.lengths[each.value]
+  length = each.value
 }
 
 output "strings_created" {
@@ -29,7 +19,7 @@ output "strings_created" {
 }
 
 output "long_string_length" {
-  value = random_string.for_each_example["longer_string"].length # 5
+  value = random_string.for_each_example["5"].length # 5
 }
 
 ```
@@ -39,12 +29,12 @@ variable "zip_sources" {
   default = {
     first_source = {
       source_content = "Some text in my first source"
-      filename = "first_source.txt"
+      filename       = "first_source.txt"
     }
 
     second_source = {
       source_content = "Some text in my second source."
-      filename = "second_source.txt"
+      filename       = "second_source.txt"
     }
   }
 }
@@ -62,7 +52,7 @@ data "archive_file" "inline_block_example" {
     for_each = var.zip_sources
 
     content {
-      content = source.value["source_content"]
+      content  = source.value["source_content"]
       filename = source.value["filename"]
     }
   }
@@ -90,12 +80,12 @@ variable "env" {
 }
 
 resource "random_string" "test_env_only" {
-  count = var.env == "test" ? 1 : 0
+  count  = var.env == "test" ? 1 : 0
   length = 5
 }
 
 resource "random_string" "prod_env_only" {
-  count = var.env == "prod" ? 1 : 0
+  count  = var.env == "prod" ? 1 : 0
   length = 5
 }
 
@@ -127,14 +117,14 @@ Iterating over maps with for:
 ```
 variable "vegetable_opinions" {
   default = {
-    artichoke = "great"
+    artichoke   = "great"
     cauliflower = "terrible"
   }
 }
 
 # Outputs {"ARTICHOKE" = "GREAT", "CAULIFLOWER" = "TERRIBLE"}
 output "uppercase_opinions" {
-  value = {for veg, opinion in var.vegetable_opinions : upper(veg) => upper(opinion)}
+  value = { for veg, opinion in var.vegetable_opinions : upper(veg) => upper(opinion) }
 }
 
 ```
@@ -160,7 +150,7 @@ output "all_random_strings_created" {
 Splat with resources created using for_each
 ```
 variable "iterator" {
-  default = [2, 5]
+  default = ["2", "5"]
 }
 
 resource "random_string" "for_each_splat" {
@@ -171,10 +161,6 @@ resource "random_string" "for_each_splat" {
 
 output "map_of_resources_created" {
   value = random_string.for_each_splat[*]
-}
-
-output "all_random_strings_created" {
-  value = values(random_string.for_each_splat[*].result)
 }
 
 ```
@@ -190,9 +176,9 @@ variable "fruits" {
 # mango
 output "for_within_string" {
   value = <<EOF
-%{~ for fruit in var.fruits } # ~ character strips empty newlines and whitespace
+%{~for fruit in var.fruits} # ~ character strips empty newlines and whitespace
   ${fruit}
-%{~ endfor }
+%{~endfor}
 EOF
 }
 
@@ -200,12 +186,12 @@ EOF
 ## Ternary
 Very useful for flagging based on environments:
 ```
-variable "environment" {
+variable "env" {
   default = "prod"
 }
 
 resource "random_string" "longer_in_prod" {
-  name = var.env == "prod" ? 5 : 3
+  length = var.env == "prod" ? 5 : 3
 }
 
 output "string_produced" {
@@ -217,8 +203,8 @@ output "string_produced" {
 ## Get path of module
 Path to the module that this configuration is in:
 ```
-output "module_path" {
-  value = module.path
+output "path_of_module" {
+  value = path.module
 }
 
 ```
@@ -229,7 +215,7 @@ resource "random_string" "insertion" {
   length = 7
 }
 
-local {
+locals {
   my_string = "Random string value is ${random_string.insertion.result}"
 }
 

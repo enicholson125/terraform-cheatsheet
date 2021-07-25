@@ -34,6 +34,12 @@ jobs:
           name: install tfswitch
           command: curl -L https://raw.githubusercontent.com/warrensbox/terraform-switcher/release/install.sh | bash
       - run:
+          name: install terraform at correct version
+          command: |
+            cd examples/terraform
+            tfswitch
+            cd ../..
+      - run:
           name: check
           command: scripts/check-terraform-examples.sh
 
