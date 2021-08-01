@@ -47,10 +47,13 @@ def get_terraform_output(filename: str):
     try:
         shutil.copyfile(filename, f"{tmp_dir}/example.tf")
         shutil.copyfile(MAIN_TF_FILE, f"{tmp_dir}/main.tf")
-        subprocess.run(["terraform", f"-chdir={tmp_dir}", "init"], stdout=subprocess.PIPE)
+        subprocess.run(["terraform", f"-chdir={tmp_dir}", "init"],
+                       stdout=subprocess.PIPE)
         output = subprocess.run(
-            ["terraform", f"-chdir={tmp_dir}", "apply", "-auto-approve", "-no-color"], stdout=subprocess.PIPE).stdout.decode()
-    except:
+            ["terraform", f"-chdir={tmp_dir}",
+                "apply", "-auto-approve", "-no-color"],
+            stdout=subprocess.PIPE).stdout.decode()
+    except:  # noqa
         # make sure we clean up the temp directory
         shutil.rmtree(tmp_dir)
         raise
