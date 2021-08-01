@@ -24,7 +24,7 @@ jobs:
             cd ../..
       - run:
           name: check
-          command: scripts/check-all-examples.sh
+          command: scripts/check-terraform-examples.sh
       - run:
           name: linting
           command: |
