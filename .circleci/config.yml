@@ -30,11 +30,6 @@ jobs:
           command: |
             pip install flake8
             flake8
-      - run:
-          name: check_cheatsheet_generation
-          command: |
-            python scripts/generate-cheatsheet.py > test-cheatsheet.md
-            diff test-cheatsheet.md cheatsheet.md
 
 workflows:
   test_and_deploy:
