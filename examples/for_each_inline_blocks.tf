@@ -30,3 +30,7 @@ data "archive_file" "inline_block_example" {
     }
   }
 }
+
+output "example_output" {
+  value = data.archive_file.inline_block_example
+}

@@ -1,7 +1,14 @@
 import json
+import os
+import shutil
+import subprocess
+
+# TODO make so this doesn't have to be run from the root of the directory
 
 CHEATSHEET_NAME = "cheatsheet.md"
 CHEATSHEET_JSON = "cheatsheet.json"
+
+MAIN_TF_FILE = "examples/terraform/main.tf"
 
 
 def add_code_block(code: str):
@@ -29,10 +36,32 @@ def load_json(json_filename: str):
         return json.load(json_file)
 
 
-def get_example_contents(filename: str):
-    filename = f"examples/{filename}"
+def get_file_contents(filename: str):
     with open(filename, 'r') as file:
         return file.read()
+
+
+def get_terraform_output(filename: str):
+    tmp_dir = "tmp_terraform"
+    os.mkdir(tmp_dir)
+    try:
+        shutil.copyfile(filename, f"{tmp_dir}/example.tf")
+        shutil.copyfile(MAIN_TF_FILE, f"{tmp_dir}/main.tf")
+        subprocess.run(["terraform", f"-chdir={tmp_dir}", "init"], stdout=subprocess.PIPE)
+        output = subprocess.run(
+            ["terraform", f"-chdir={tmp_dir}", "apply", "-auto-approve", "-no-color"], stdout=subprocess.PIPE).stdout.decode()
+    except:
+        # make sure we clean up the temp directory
+        shutil.rmtree(tmp_dir)
+        raise
+    shutil.rmtree(tmp_dir)
+    return output
+
+
+def get_code_example_and_output(example_filename):
+    code = add_code_block(get_file_contents(example_filename))
+    output = add_code_block(get_terraform_output(example_filename))
+    return code + add_text("Applying this example outputs:") + output
 
 
 def generate_cheatsheet_text():
@@ -45,20 +74,20 @@ def generate_cheatsheet_text():
             if len(third_heading) == 1:
                 for entry, code_file in third_heading.items():
                     cheatsheet += add_text(entry)
-                    cheatsheet += add_code_block(
-                        get_example_contents(code_file))
+                    cheatsheet += get_code_example_and_output(
+                        f"examples/{code_file}")
             else:
                 for next_heading, entry in third_heading.items():
                     if type(entry) == str:
                         cheatsheet += add_text(next_heading)
-                        cheatsheet += add_code_block(
-                            get_example_contents(entry))
+                        cheatsheet += get_code_example_and_output(
+                            f"examples/{entry}")
                     else:
                         cheatsheet += add_third_heading(next_heading)
                         for text, code_file in entry.items():
                             cheatsheet += add_text(text)
-                            cheatsheet += add_code_block(
-                                get_example_contents(code_file))
+                            cheatsheet += get_code_example_and_output(
+                                f"examples/{code_file}")
     return cheatsheet
 
 

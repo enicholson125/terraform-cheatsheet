@@ -2,13 +2,10 @@ variable "fruits" {
   default = ["apple", "tangerine", "mango"]
 }
 
-# Outputs (each on a new line):
-# apple
-# tangerine
-# mango
 output "for_within_string" {
+  # ~ character strips empty newlines and whitespace
   value = <<EOF
-%{~for fruit in var.fruits} # ~ character strips empty newlines and whitespace
+%{~for fruit in var.fruits}
   ${fruit}
 %{~endfor}
 EOF

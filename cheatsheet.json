@@ -17,7 +17,7 @@
                 "Splat with resources created using count:": "splat_count.tf",
                 "Splat with resources created using for_each": "splat_for_each.tf"
             },
-            "Using for within a string (string directive)": "for_string_directive.tf"
+            "Using a for loop within a string (string directive)": "for_string_directive.tf"
         },
         "Ternary": {
             "Very useful for flagging based on environments:": "ternary.tf"

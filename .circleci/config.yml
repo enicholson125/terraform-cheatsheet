@@ -8,24 +8,7 @@ jobs:
     steps:
       - checkout
       - run: python scripts/generate-cheatsheet.py
-  # TODO Generate cheatsheet and check it matches checked-in version
-  # TODO Check all terraform is valid and formatted
-  test_cheatsheet_generation:
-    docker:
-      - image: python:latest
-    steps:
-      - checkout
-      - run:
-          name: linting
-          command: |
-            pip install flake8
-            flake8
-      - run:
-          name: check_cheatsheet_generation
-          command: |
-            python scripts/generate-cheatsheet.py > test-cheatsheet.md
-            diff test-cheatsheet.md cheatsheet.md
-  test_tf_examples:
+  test:
     docker:
       - image: python:latest
     steps:
@@ -41,13 +24,22 @@ jobs:
             cd ../..
       - run:
           name: check
-          command: scripts/check-terraform-examples.sh
+          command: scripts/check-all-examples.sh
+      - run:
+          name: linting
+          command: |
+            pip install flake8
+            flake8
+      - run:
+          name: check_cheatsheet_generation
+          command: |
+            python scripts/generate-cheatsheet.py > test-cheatsheet.md
+            diff test-cheatsheet.md cheatsheet.md
 
 workflows:
   test_and_deploy:
     jobs:
-      - test_cheatsheet_generation
-      - test_tf_examples
+      - test
       # - deploy:
       #     requires:
       #       - test
