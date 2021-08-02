@@ -16,19 +16,31 @@ def add_code_block(code: str):
 
 
 def add_top_heading(heading: str):
-    return f"# {heading}\n"
+    return f'# {heading}<a name="{heading.replace(" ", "_")}"></a>\n'
 
 
 def add_second_heading(heading: str):
-    return f"## {heading}\n"
+    return f'## {heading}<a name="{heading.replace(" ", "_")}"></a>\n'
 
 
 def add_third_heading(heading: str):
-    return f"### {heading}\n"
+    return f'### {heading}<a name="{heading.replace(" ", "_")}"></a>\n'
 
 
 def add_text(text: str):
     return f"{text}\n"
+
+
+def add_top_level_index_entry(entry: str):
+    return f'[{entry}](#{entry.replace(" ", "_")})\n'
+
+
+def add_second_level_index_entry(entry: str):
+    return f'[{entry}](#{entry.replace(" ", "_")})\n'
+
+
+def add_third_level_index_entry(entry: str):
+    return f'    [{entry}](#{entry.replace(" ", "_")})\n'
 
 
 def load_json(json_filename: str):
@@ -70,10 +82,12 @@ def get_code_example_and_output(example_filename):
 def generate_cheatsheet_text():
     cheatsheet_spec = load_json(CHEATSHEET_JSON)
     cheatsheet = ""
+    index = add_top_heading("Table of Contents")
     for first_heading, second_heading in cheatsheet_spec.items():
         cheatsheet += add_top_heading(first_heading)
         for heading, third_heading in second_heading.items():
             cheatsheet += add_second_heading(heading)
+            index += add_second_level_index_entry(heading)
             if len(third_heading) == 1:
                 for entry, code_file in third_heading.items():
                     cheatsheet += add_text(entry)
@@ -87,11 +101,12 @@ def generate_cheatsheet_text():
                             f"examples/{entry}")
                     else:
                         cheatsheet += add_third_heading(next_heading)
+                        index += add_third_level_index_entry(next_heading)
                         for text, code_file in entry.items():
                             cheatsheet += add_text(text)
                             cheatsheet += get_code_example_and_output(
                                 f"examples/{code_file}")
-    return cheatsheet
+    return index + cheatsheet
 
 
 if __name__ == "__main__":
