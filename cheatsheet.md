@@ -1,13 +1,13 @@
 # Table of Contents<a name="Table_of_Contents"></a>
-[Loops](#Loops)
-    [for_each](#for_each)
-    [count](#count)
-    [for](#for)
-    [Referencing all resources created with a loop (splat)](#Referencing_all_resources_created_with_a_loop_(splat))
-[Ternary](#Ternary)
-[Get path of module](#Get_path_of_module)
-[String interpolations (templating)](#String_interpolations_(templating))
-[JSON encoding](#JSON_encoding)
+ - [Loops](#Loops)
+    - [for_each](#for_each)
+    - [count](#count)
+    - [for](#for)
+    - [Referencing all resources created with a loop (splat)](#Referencing_all_resources_created_with_a_loop_(splat))
+ - [Ternary](#Ternary)
+ - [Get path of module](#Get_path_of_module)
+ - [String interpolations (templating)](#String_interpolations_(templating))
+ - [JSON encoding](#JSON_encoding)
 # Terraform config cheatsheet<a name="Terraform_config_cheatsheet"></a>
 ## Loops<a name="Loops"></a>
 ### for_each<a name="for_each"></a>
@@ -108,10 +108,10 @@ Changes to Outputs:
           + upper            = true
         }
     }
-random_string.for_each_example["2"]: Creating...
 random_string.for_each_example["5"]: Creating...
-random_string.for_each_example["5"]: Creation complete after 0s [id=9>Pu}]
-random_string.for_each_example["2"]: Creation complete after 0s [id=h]]
+random_string.for_each_example["2"]: Creating...
+random_string.for_each_example["5"]: Creation complete after 0s [id=>Gjxx]
+random_string.for_each_example["2"]: Creation complete after 0s [id=[>]
 
 Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
 
@@ -120,7 +120,7 @@ Outputs:
 long_string_length = 5
 strings_created = {
   "2" = {
-    "id" = "h]"
+    "id" = "[>"
     "keepers" = tomap(null) /* of string */
     "length" = 2
     "lower" = true
@@ -130,12 +130,12 @@ strings_created = {
     "min_upper" = 0
     "number" = true
     "override_special" = tostring(null)
-    "result" = "h]"
+    "result" = "[>"
     "special" = true
     "upper" = true
   }
   "5" = {
-    "id" = "9>Pu}"
+    "id" = ">Gjxx"
     "keepers" = tomap(null) /* of string */
     "length" = 5
     "lower" = true
@@ -145,7 +145,7 @@ strings_created = {
     "min_upper" = 0
     "number" = true
     "override_special" = tostring(null)
-    "result" = "9>Pu}"
+    "result" = ">Gjxx"
     "special" = true
     "upper" = true
   }
@@ -325,12 +325,12 @@ Terraform will perform the following actions:
     }
 
 Plan: 3 to add, 0 to change, 0 to destroy.
-random_string.count_basic[2]: Creating...
 random_string.count_basic[0]: Creating...
 random_string.count_basic[1]: Creating...
-random_string.count_basic[1]: Creation complete after 0s [id=xMJdu]
-random_string.count_basic[0]: Creation complete after 0s [id=b>]
-random_string.count_basic[2]: Creation complete after 0s [id==]
+random_string.count_basic[2]: Creating...
+random_string.count_basic[0]: Creation complete after 0s [id=7!]
+random_string.count_basic[2]: Creation complete after 0s [id=p]
+random_string.count_basic[1]: Creation complete after 0s [id=n(UFj]
 
 Apply complete! Resources: 3 added, 0 changed, 0 destroyed.
 
@@ -405,14 +405,14 @@ Changes to Outputs:
       + upper            = true
     }
 random_string.test_env_only[0]: Creating...
-random_string.test_env_only[0]: Creation complete after 0s [id=h&$1o]
+random_string.test_env_only[0]: Creation complete after 0s [id=EgQvc]
 
 Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 
 Outputs:
 
 test_env_only = {
-  "id" = "h&$1o"
+  "id" = "EgQvc"
   "keepers" = tomap(null) /* of string */
   "length" = 5
   "lower" = true
@@ -422,7 +422,7 @@ test_env_only = {
   "min_upper" = 0
   "number" = true
   "override_special" = tostring(null)
-  "result" = "h&$1o"
+  "result" = "EgQvc"
   "special" = true
   "upper" = true
 }
@@ -584,18 +584,18 @@ Changes to Outputs:
 random_string.splat_count[2]: Creating...
 random_string.splat_count[1]: Creating...
 random_string.splat_count[0]: Creating...
-random_string.splat_count[2]: Creation complete after 0s [id=[]
-random_string.splat_count[0]: Creation complete after 0s [id=tb]
-random_string.splat_count[1]: Creation complete after 0s [id=Ig+ou]
+random_string.splat_count[1]: Creation complete after 0s [id=0-2Q<]
+random_string.splat_count[2]: Creation complete after 0s [id=U]
+random_string.splat_count[0]: Creation complete after 0s [id=M[]
 
 Apply complete! Resources: 3 added, 0 changed, 0 destroyed.
 
 Outputs:
 
 all_random_strings_created = [
-  "tb",
-  "Ig+ou",
-  "[",
+  "M[",
+  "0-2Q<",
+  "U",
 ]
 
 ```
@@ -692,10 +692,10 @@ Changes to Outputs:
             }
         },
     ]
-random_string.for_each_splat["2"]: Creating...
 random_string.for_each_splat["5"]: Creating...
-random_string.for_each_splat["5"]: Creation complete after 0s [id=5Tjxb]
-random_string.for_each_splat["2"]: Creation complete after 0s [id={}]
+random_string.for_each_splat["2"]: Creating...
+random_string.for_each_splat["2"]: Creation complete after 0s [id=+L]
+random_string.for_each_splat["5"]: Creation complete after 0s [id=lR-PC]
 
 Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
 
@@ -704,7 +704,7 @@ Outputs:
 map_of_resources_created = [
   {
     "2" = {
-      "id" = "{}"
+      "id" = "+L"
       "keepers" = tomap(null) /* of string */
       "length" = 2
       "lower" = true
@@ -714,12 +714,12 @@ map_of_resources_created = [
       "min_upper" = 0
       "number" = true
       "override_special" = tostring(null)
-      "result" = "{}"
+      "result" = "+L"
       "special" = true
       "upper" = true
     }
     "5" = {
-      "id" = "5Tjxb"
+      "id" = "lR-PC"
       "keepers" = tomap(null) /* of string */
       "length" = 5
       "lower" = true
@@ -729,7 +729,7 @@ map_of_resources_created = [
       "min_upper" = 0
       "number" = true
       "override_special" = tostring(null)
-      "result" = "5Tjxb"
+      "result" = "lR-PC"
       "special" = true
       "upper" = true
     }
@@ -826,13 +826,13 @@ Plan: 1 to add, 0 to change, 0 to destroy.
 Changes to Outputs:
   + string_produced = (known after apply)
 random_string.longer_in_prod: Creating...
-random_string.longer_in_prod: Creation complete after 0s [id=$6=n@]
+random_string.longer_in_prod: Creation complete after 0s [id=Tq-lk]
 
 Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 
 Outputs:
 
-string_produced = "$6=n@"
+string_produced = "Tq-lk"
 
 ```
 ## Get path of module<a name="Get_path_of_module"></a>
@@ -904,13 +904,13 @@ Plan: 1 to add, 0 to change, 0 to destroy.
 Changes to Outputs:
   + my_string = (known after apply)
 random_string.insertion: Creating...
-random_string.insertion: Creation complete after 0s [id=k_$xqCM]
+random_string.insertion: Creation complete after 0s [id=bZHHaJg]
 
 Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 
 Outputs:
 
-my_string = "Random string value is k_$xqCM"
+my_string = "Random string value is bZHHaJg"
 
 ```
 ## JSON encoding<a name="JSON_encoding"></a>
