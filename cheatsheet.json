@@ -1,35 +1,27 @@
 {
-    "Terraform config cheatsheet": {
+    "Terraform HCL cheatsheet": {
         "Loops": {
             "for_each": {
-                "Creating multiple resources with for_each:": "for_each_resources.tf",
-                "Creating multiple inline blocks in a resource:": "for_each_inline_blocks.tf"
+                "Creating resources": "for_each_resources.tf",
+                "Creating sections within a resource:": "for_each_inline_blocks.tf"
             },
             "count": {
-                "Better in general to use for_each as count makes the resources addresses less readable and will recreate all the resources if you remove the first one in the array (as their index will have changed). However, if you do want to use it:": "count_basic.tf",
-                "Very useful with ternaries for flagging resources on and off:": "count_ternary.tf"
+                "Multiple resources from list": "count_basic.tf",
+                "Flagging resources on and off": "count_ternary.tf"
             },
             "for": {
-                "Iterating over lists with for:": "for_lists.tf",
-                "Iterating over maps with for:": "for_maps.tf"
+                "Iterating over lists": "for_lists.tf",
+                "Iterating over maps": "for_maps.tf"
             },
-            "Referencing all resources created with a loop (splat)": {
-                "Splat with resources created using count:": "splat_count.tf",
-                "Splat with resources created using for_each": "splat_for_each.tf"
+            "Wildcard to reference all resources created (splat)": {
+                "Created using count": "splat_count.tf",
+                "Created using for_each": "splat_for_each.tf"
             },
-            "Using a for loop within a string (string directive)": "for_string_directive.tf"
+            "For loop in a string (string directive)": "for_string_directive.tf"
         },
-        "Ternary": {
-            "Very useful for flagging based on environments:": "ternary.tf"
-        },
-        "Get path of module": {
-            "Path to the module that this configuration is in:": "path_to_module.tf"
-        },
-        "String interpolations (templating)": {
-            "If the value you're interpolating is an attribute of a resource then Terraform will infer the dependency between the two, that is it won't try to build the resource containing the interpolation until it has built the resource that is referenced.": "string_interpolation.tf"
-        },
-        "JSON encoding": {
-            "This is particularly if you're working in AWS, as it makes writing IAM policies neater": "json_encode.tf"
-        }
+        "Ternary": "ternary.tf",
+        "Path of running terraform code": "path_to_module.tf",
+        "Variable templating (string interpolations)": "string_interpolation.tf",
+        "JSON encoding": "json_encode.tf"
     }
 }

@@ -1,17 +1,26 @@
 # Table of Contents<a name="Table_of_Contents"></a>
  - [Loops](#Loops)
     - [for_each](#for_each)
+      - [Creating resources](#Creating_resources)
+      - [Creating sections within a resource:](#Creating_sections_within_a_resource:)
     - [count](#count)
+      - [Multiple resources from list](#Multiple_resources_from_list)
+      - [Flagging resources on and off](#Flagging_resources_on_and_off)
     - [for](#for)
-    - [Referencing all resources created with a loop (splat)](#Referencing_all_resources_created_with_a_loop_(splat))
+      - [Iterating over lists](#Iterating_over_lists)
+      - [Iterating over maps](#Iterating_over_maps)
+    - [Wildcard to reference all resources created (splat)](#Wildcard_to_reference_all_resources_created_(splat))
+      - [Created using count](#Created_using_count)
+      - [Created using for_each](#Created_using_for_each)
+      - [For loop in a string (string directive)](#For_loop_in_a_string_(string_directive))
  - [Ternary](#Ternary)
- - [Get path of module](#Get_path_of_module)
- - [String interpolations (templating)](#String_interpolations_(templating))
+ - [Path of running terraform code](#Path_of_running_terraform_code)
+ - [Variable templating (string interpolations)](#Variable_templating_(string_interpolations))
  - [JSON encoding](#JSON_encoding)
-# Terraform config cheatsheet<a name="Terraform_config_cheatsheet"></a>
+# Terraform HCL cheatsheet<a name="Terraform_HCL_cheatsheet"></a>
 ## Loops<a name="Loops"></a>
 ### for_each<a name="for_each"></a>
-Creating multiple resources with for_each:
+#### Creating resources<a name="Creating_resources"></a>
 ```
 variable "iterator" {
   default = ["2", "5"]
@@ -110,8 +119,8 @@ Changes to Outputs:
     }
 random_string.for_each_example["5"]: Creating...
 random_string.for_each_example["2"]: Creating...
-random_string.for_each_example["5"]: Creation complete after 0s [id=>Gjxx]
-random_string.for_each_example["2"]: Creation complete after 0s [id=[>]
+random_string.for_each_example["2"]: Creation complete after 0s [id=Uf]
+random_string.for_each_example["5"]: Creation complete after 0s [id=k_$Cl]
 
 Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
 
@@ -120,7 +129,7 @@ Outputs:
 long_string_length = 5
 strings_created = {
   "2" = {
-    "id" = "[>"
+    "id" = "Uf"
     "keepers" = tomap(null) /* of string */
     "length" = 2
     "lower" = true
@@ -130,12 +139,12 @@ strings_created = {
     "min_upper" = 0
     "number" = true
     "override_special" = tostring(null)
-    "result" = "[>"
+    "result" = "Uf"
     "special" = true
     "upper" = true
   }
   "5" = {
-    "id" = ">Gjxx"
+    "id" = "k_$Cl"
     "keepers" = tomap(null) /* of string */
     "length" = 5
     "lower" = true
@@ -145,14 +154,14 @@ strings_created = {
     "min_upper" = 0
     "number" = true
     "override_special" = tostring(null)
-    "result" = ">Gjxx"
+    "result" = "k_$Cl"
     "special" = true
     "upper" = true
   }
 }
 
 ```
-Creating multiple inline blocks in a resource:
+#### Creating sections within a resource:<a name="Creating_sections_within_a_resource:"></a>
 ```
 variable "zip_sources" {
   default = {
@@ -257,8 +266,14 @@ example_output = {
 
 ```
 ### count<a name="count"></a>
-Better in general to use for_each as count makes the resources addresses less readable and will recreate all the resources if you remove the first one in the array (as their index will have changed). However, if you do want to use it:
+#### Multiple resources from list<a name="Multiple_resources_from_list"></a>
 ```
+# Better to use for_each if you can, as count makes the resources
+# addresses less readable (e.g. random_string.count_basic[0])
+# will recreate all the resources if you remove the first one in
+# the array (as their index will have changed).
+# However, if you do want to use it:
+
 variable "string_lengths" {
   default = [2, 5, 1]
 }
@@ -325,17 +340,17 @@ Terraform will perform the following actions:
     }
 
 Plan: 3 to add, 0 to change, 0 to destroy.
-random_string.count_basic[0]: Creating...
 random_string.count_basic[1]: Creating...
+random_string.count_basic[0]: Creating...
 random_string.count_basic[2]: Creating...
-random_string.count_basic[0]: Creation complete after 0s [id=7!]
-random_string.count_basic[2]: Creation complete after 0s [id=p]
-random_string.count_basic[1]: Creation complete after 0s [id=n(UFj]
+random_string.count_basic[1]: Creation complete after 0s [id=y$]r4]
+random_string.count_basic[2]: Creation complete after 0s [id=1]
+random_string.count_basic[0]: Creation complete after 0s [id=ee]
 
 Apply complete! Resources: 3 added, 0 changed, 0 destroyed.
 
 ```
-Very useful with ternaries for flagging resources on and off:
+#### Flagging resources on and off<a name="Flagging_resources_on_and_off"></a>
 ```
 variable "env" {
   default = "test"
@@ -405,14 +420,14 @@ Changes to Outputs:
       + upper            = true
     }
 random_string.test_env_only[0]: Creating...
-random_string.test_env_only[0]: Creation complete after 0s [id=EgQvc]
+random_string.test_env_only[0]: Creation complete after 0s [id=9cxZ)]
 
 Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 
 Outputs:
 
 test_env_only = {
-  "id" = "EgQvc"
+  "id" = "9cxZ)"
   "keepers" = tomap(null) /* of string */
   "length" = 5
   "lower" = true
@@ -422,14 +437,14 @@ test_env_only = {
   "min_upper" = 0
   "number" = true
   "override_special" = tostring(null)
-  "result" = "EgQvc"
+  "result" = "9cxZ)"
   "special" = true
   "upper" = true
 }
 
 ```
 ### for<a name="for"></a>
-Iterating over lists with for:
+#### Iterating over lists<a name="Iterating_over_lists"></a>
 ```
 variable "favourite_vegetables" {
   default = ["Artichoke", "Broccoli", "Potato"]
@@ -464,7 +479,7 @@ vegetable_statements = [
 ]
 
 ```
-Iterating over maps with for:
+#### Iterating over maps<a name="Iterating_over_maps"></a>
 ```
 variable "vegetable_opinions" {
   default = {
@@ -500,8 +515,8 @@ uppercase_opinions = {
 }
 
 ```
-### Referencing all resources created with a loop (splat)<a name="Referencing_all_resources_created_with_a_loop_(splat)"></a>
-Splat with resources created using count:
+### Wildcard to reference all resources created (splat)<a name="Wildcard_to_reference_all_resources_created_(splat)"></a>
+#### Created using count<a name="Created_using_count"></a>
 ```
 variable "string_lengths" {
   default = [2, 5, 1]
@@ -584,22 +599,22 @@ Changes to Outputs:
 random_string.splat_count[2]: Creating...
 random_string.splat_count[1]: Creating...
 random_string.splat_count[0]: Creating...
-random_string.splat_count[1]: Creation complete after 0s [id=0-2Q<]
-random_string.splat_count[2]: Creation complete after 0s [id=U]
-random_string.splat_count[0]: Creation complete after 0s [id=M[]
+random_string.splat_count[2]: Creation complete after 0s [id=v]
+random_string.splat_count[0]: Creation complete after 0s [id=$t]
+random_string.splat_count[1]: Creation complete after 0s [id=qAKSP]
 
 Apply complete! Resources: 3 added, 0 changed, 0 destroyed.
 
 Outputs:
 
 all_random_strings_created = [
-  "M[",
-  "0-2Q<",
-  "U",
+  "$t",
+  "qAKSP",
+  "v",
 ]
 
 ```
-Splat with resources created using for_each
+#### Created using for_each<a name="Created_using_for_each"></a>
 ```
 variable "iterator" {
   default = ["2", "5"]
@@ -692,10 +707,10 @@ Changes to Outputs:
             }
         },
     ]
-random_string.for_each_splat["5"]: Creating...
 random_string.for_each_splat["2"]: Creating...
-random_string.for_each_splat["2"]: Creation complete after 0s [id=+L]
-random_string.for_each_splat["5"]: Creation complete after 0s [id=lR-PC]
+random_string.for_each_splat["5"]: Creating...
+random_string.for_each_splat["2"]: Creation complete after 0s [id=]X]
+random_string.for_each_splat["5"]: Creation complete after 0s [id=<)euo]
 
 Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
 
@@ -704,7 +719,7 @@ Outputs:
 map_of_resources_created = [
   {
     "2" = {
-      "id" = "+L"
+      "id" = "]X"
       "keepers" = tomap(null) /* of string */
       "length" = 2
       "lower" = true
@@ -714,12 +729,12 @@ map_of_resources_created = [
       "min_upper" = 0
       "number" = true
       "override_special" = tostring(null)
-      "result" = "+L"
+      "result" = "]X"
       "special" = true
       "upper" = true
     }
     "5" = {
-      "id" = "lR-PC"
+      "id" = "<)euo"
       "keepers" = tomap(null) /* of string */
       "length" = 5
       "lower" = true
@@ -729,7 +744,7 @@ map_of_resources_created = [
       "min_upper" = 0
       "number" = true
       "override_special" = tostring(null)
-      "result" = "lR-PC"
+      "result" = "<)euo"
       "special" = true
       "upper" = true
     }
@@ -737,7 +752,7 @@ map_of_resources_created = [
 ]
 
 ```
-Using a for loop within a string (string directive)
+### For loop in a string (string directive)<a name="For_loop_in_a_string_(string_directive)"></a>
 ```
 variable "fruits" {
   default = ["apple", "tangerine", "mango"]
@@ -781,8 +796,9 @@ EOT
 
 ```
 ## Ternary<a name="Ternary"></a>
-Very useful for flagging based on environments:
 ```
+# Very useful for varying resources by environment
+
 variable "env" {
   default = "prod"
 }
@@ -826,19 +842,25 @@ Plan: 1 to add, 0 to change, 0 to destroy.
 Changes to Outputs:
   + string_produced = (known after apply)
 random_string.longer_in_prod: Creating...
-random_string.longer_in_prod: Creation complete after 0s [id=Tq-lk]
+random_string.longer_in_prod: Creation complete after 0s [id=Ya}*Q]
 
 Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 
 Outputs:
 
-string_produced = "Tq-lk"
+string_produced = "Ya}*Q"
 
 ```
-## Get path of module<a name="Get_path_of_module"></a>
-Path to the module that this configuration is in:
+## Path of running terraform code<a name="Path_of_running_terraform_code"></a>
 ```
-output "path_of_module" {
+# This gives the path of the terraform running
+# relative to the directory in which the entry
+# terraform was run.
+# This the entry terraform, so it returns '.'
+# This is useful when creating and referencing
+# non-terraform files bundled into a module
+
+output "entry_terraform_path" {
   value = path.module
 }
 
@@ -847,7 +869,7 @@ Applying this example outputs:
 ```
 
 Changes to Outputs:
-  + path_of_module = "."
+  + entry_terraform_path = "."
 
 You can apply this plan to save these new output values to the Terraform
 state, without changing any real infrastructure.
@@ -856,12 +878,16 @@ Apply complete! Resources: 0 added, 0 changed, 0 destroyed.
 
 Outputs:
 
-path_of_module = "."
+entry_terraform_path = "."
 
 ```
-## String interpolations (templating)<a name="String_interpolations_(templating)"></a>
-If the value you're interpolating is an attribute of a resource then Terraform will infer the dependency between the two, that is it won't try to build the resource containing the interpolation until it has built the resource that is referenced.
+## Variable templating (string interpolations)<a name="Variable_templating_(string_interpolations)"></a>
 ```
+# If the value you're interpolating is part of a resource
+# then Terraform will infer the dependency between the two -
+# it won't try to build the resource containing the interpolation
+# until it has built the referenced resource.
+
 resource "random_string" "insertion" {
   length = 7
 }
@@ -904,18 +930,20 @@ Plan: 1 to add, 0 to change, 0 to destroy.
 Changes to Outputs:
   + my_string = (known after apply)
 random_string.insertion: Creating...
-random_string.insertion: Creation complete after 0s [id=bZHHaJg]
+random_string.insertion: Creation complete after 0s [id=qGH7%l:]
 
 Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 
 Outputs:
 
-my_string = "Random string value is bZHHaJg"
+my_string = "Random string value is qGH7%l:"
 
 ```
 ## JSON encoding<a name="JSON_encoding"></a>
-This is particularly if you're working in AWS, as it makes writing IAM policies neater
 ```
+# This is particularly useful if you're working in
+# AWS, as it makes IAM policy writing neater
+
 output "example_json_policy" {
   value = jsonencode({
     Version = "2012-10-17"

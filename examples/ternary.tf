@@ -1,3 +1,5 @@
+# Very useful for varying resources by environment
+
 variable "env" {
   default = "prod"
 }
