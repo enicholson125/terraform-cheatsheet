@@ -2,20 +2,20 @@
  - [Loops](#Loops)
     - [for_each](#for_each)
       - [Creating resources](#Creating_resources)
-      - [Creating sections within a resource:](#Creating_sections_within_a_resource:)
+      - [Creating sections within a resource](#Creating_sections_within_a_resource)
     - [count](#count)
       - [Multiple resources from list](#Multiple_resources_from_list)
       - [Flagging resources on and off](#Flagging_resources_on_and_off)
     - [for](#for)
       - [Iterating over lists](#Iterating_over_lists)
       - [Iterating over maps](#Iterating_over_maps)
+      - [For loop in a string (string directive)](#For_loop_in_a_string_(string_directive))
     - [Wildcard to reference all resources created (splat)](#Wildcard_to_reference_all_resources_created_(splat))
       - [Created using count](#Created_using_count)
       - [Created using for_each](#Created_using_for_each)
-      - [For loop in a string (string directive)](#For_loop_in_a_string_(string_directive))
  - [Ternary](#Ternary)
- - [Path of running terraform code](#Path_of_running_terraform_code)
- - [Variable templating (string interpolations)](#Variable_templating_(string_interpolations))
+ - [Get path of running terraform code](#Get_path_of_running_terraform_code)
+ - [Variable templating (string interpolation)](#Variable_templating_(string_interpolation))
  - [JSON encoding](#JSON_encoding)
 # Terraform HCL cheatsheet<a name="Terraform_HCL_cheatsheet"></a>
 ## Loops<a name="Loops"></a>
@@ -119,8 +119,8 @@ Changes to Outputs:
     }
 random_string.for_each_example["5"]: Creating...
 random_string.for_each_example["2"]: Creating...
-random_string.for_each_example["2"]: Creation complete after 0s [id=Uf]
-random_string.for_each_example["5"]: Creation complete after 0s [id=k_$Cl]
+random_string.for_each_example["2"]: Creation complete after 0s [id=tk]
+random_string.for_each_example["5"]: Creation complete after 0s [id=-G[f:]
 
 Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
 
@@ -129,7 +129,7 @@ Outputs:
 long_string_length = 5
 strings_created = {
   "2" = {
-    "id" = "Uf"
+    "id" = "tk"
     "keepers" = tomap(null) /* of string */
     "length" = 2
     "lower" = true
@@ -139,12 +139,12 @@ strings_created = {
     "min_upper" = 0
     "number" = true
     "override_special" = tostring(null)
-    "result" = "Uf"
+    "result" = "tk"
     "special" = true
     "upper" = true
   }
   "5" = {
-    "id" = "k_$Cl"
+    "id" = "-G[f:"
     "keepers" = tomap(null) /* of string */
     "length" = 5
     "lower" = true
@@ -154,14 +154,14 @@ strings_created = {
     "min_upper" = 0
     "number" = true
     "override_special" = tostring(null)
-    "result" = "k_$Cl"
+    "result" = "-G[f:"
     "special" = true
     "upper" = true
   }
 }
 
 ```
-#### Creating sections within a resource:<a name="Creating_sections_within_a_resource:"></a>
+#### Creating sections within a resource<a name="Creating_sections_within_a_resource"></a>
 ```
 variable "zip_sources" {
   default = {
@@ -340,12 +340,12 @@ Terraform will perform the following actions:
     }
 
 Plan: 3 to add, 0 to change, 0 to destroy.
+random_string.count_basic[2]: Creating...
 random_string.count_basic[1]: Creating...
 random_string.count_basic[0]: Creating...
-random_string.count_basic[2]: Creating...
-random_string.count_basic[1]: Creation complete after 0s [id=y$]r4]
-random_string.count_basic[2]: Creation complete after 0s [id=1]
-random_string.count_basic[0]: Creation complete after 0s [id=ee]
+random_string.count_basic[0]: Creation complete after 0s [id=Nz]
+random_string.count_basic[1]: Creation complete after 0s [id=+S!9S]
+random_string.count_basic[2]: Creation complete after 0s [id=b]
 
 Apply complete! Resources: 3 added, 0 changed, 0 destroyed.
 
@@ -420,14 +420,14 @@ Changes to Outputs:
       + upper            = true
     }
 random_string.test_env_only[0]: Creating...
-random_string.test_env_only[0]: Creation complete after 0s [id=9cxZ)]
+random_string.test_env_only[0]: Creation complete after 0s [id=k)at1]
 
 Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 
 Outputs:
 
 test_env_only = {
-  "id" = "9cxZ)"
+  "id" = "k)at1"
   "keepers" = tomap(null) /* of string */
   "length" = 5
   "lower" = true
@@ -437,7 +437,7 @@ test_env_only = {
   "min_upper" = 0
   "number" = true
   "override_special" = tostring(null)
-  "result" = "9cxZ)"
+  "result" = "k)at1"
   "special" = true
   "upper" = true
 }
@@ -513,6 +513,49 @@ uppercase_opinions = {
   "ARTICHOKE" = "GREAT"
   "CAULIFLOWER" = "TERRIBLE"
 }
+
+```
+#### For loop in a string (string directive)<a name="For_loop_in_a_string_(string_directive)"></a>
+```
+variable "fruits" {
+  default = ["apple", "tangerine", "mango"]
+}
+
+output "for_within_string" {
+  # ~ character strips empty newlines and whitespace
+  value = <<EOF
+%{~for fruit in var.fruits}
+  ${fruit}
+%{~endfor}
+EOF
+}
+
+```
+Applying this example outputs:
+```
+
+Changes to Outputs:
+  + for_within_string = <<-EOT
+        
+          apple
+          tangerine
+          mango
+    EOT
+
+You can apply this plan to save these new output values to the Terraform
+state, without changing any real infrastructure.
+
+Apply complete! Resources: 0 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+for_within_string = <<EOT
+
+  apple
+  tangerine
+  mango
+
+EOT
 
 ```
 ### Wildcard to reference all resources created (splat)<a name="Wildcard_to_reference_all_resources_created_(splat)"></a>
@@ -596,21 +639,21 @@ Changes to Outputs:
       + (known after apply),
       + (known after apply),
     ]
-random_string.splat_count[2]: Creating...
 random_string.splat_count[1]: Creating...
 random_string.splat_count[0]: Creating...
-random_string.splat_count[2]: Creation complete after 0s [id=v]
-random_string.splat_count[0]: Creation complete after 0s [id=$t]
-random_string.splat_count[1]: Creation complete after 0s [id=qAKSP]
+random_string.splat_count[2]: Creating...
+random_string.splat_count[1]: Creation complete after 0s [id=b:FI{]
+random_string.splat_count[2]: Creation complete after 0s [id=O]
+random_string.splat_count[0]: Creation complete after 0s [id=y+]
 
 Apply complete! Resources: 3 added, 0 changed, 0 destroyed.
 
 Outputs:
 
 all_random_strings_created = [
-  "$t",
-  "qAKSP",
-  "v",
+  "y+",
+  "b:FI{",
+  "O",
 ]
 
 ```
@@ -707,10 +750,10 @@ Changes to Outputs:
             }
         },
     ]
-random_string.for_each_splat["2"]: Creating...
 random_string.for_each_splat["5"]: Creating...
-random_string.for_each_splat["2"]: Creation complete after 0s [id=]X]
-random_string.for_each_splat["5"]: Creation complete after 0s [id=<)euo]
+random_string.for_each_splat["2"]: Creating...
+random_string.for_each_splat["5"]: Creation complete after 0s [id=j{U#(]
+random_string.for_each_splat["2"]: Creation complete after 0s [id=GG]
 
 Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
 
@@ -719,7 +762,7 @@ Outputs:
 map_of_resources_created = [
   {
     "2" = {
-      "id" = "]X"
+      "id" = "GG"
       "keepers" = tomap(null) /* of string */
       "length" = 2
       "lower" = true
@@ -729,12 +772,12 @@ map_of_resources_created = [
       "min_upper" = 0
       "number" = true
       "override_special" = tostring(null)
-      "result" = "]X"
+      "result" = "GG"
       "special" = true
       "upper" = true
     }
     "5" = {
-      "id" = "<)euo"
+      "id" = "j{U#("
       "keepers" = tomap(null) /* of string */
       "length" = 5
       "lower" = true
@@ -744,55 +787,12 @@ map_of_resources_created = [
       "min_upper" = 0
       "number" = true
       "override_special" = tostring(null)
-      "result" = "<)euo"
+      "result" = "j{U#("
       "special" = true
       "upper" = true
     }
   },
 ]
-
-```
-### For loop in a string (string directive)<a name="For_loop_in_a_string_(string_directive)"></a>
-```
-variable "fruits" {
-  default = ["apple", "tangerine", "mango"]
-}
-
-output "for_within_string" {
-  # ~ character strips empty newlines and whitespace
-  value = <<EOF
-%{~for fruit in var.fruits}
-  ${fruit}
-%{~endfor}
-EOF
-}
-
-```
-Applying this example outputs:
-```
-
-Changes to Outputs:
-  + for_within_string = <<-EOT
-        
-          apple
-          tangerine
-          mango
-    EOT
-
-You can apply this plan to save these new output values to the Terraform
-state, without changing any real infrastructure.
-
-Apply complete! Resources: 0 added, 0 changed, 0 destroyed.
-
-Outputs:
-
-for_within_string = <<EOT
-
-  apple
-  tangerine
-  mango
-
-EOT
 
 ```
 ## Ternary<a name="Ternary"></a>
@@ -842,16 +842,16 @@ Plan: 1 to add, 0 to change, 0 to destroy.
 Changes to Outputs:
   + string_produced = (known after apply)
 random_string.longer_in_prod: Creating...
-random_string.longer_in_prod: Creation complete after 0s [id=Ya}*Q]
+random_string.longer_in_prod: Creation complete after 0s [id=PfIHQ]
 
 Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 
 Outputs:
 
-string_produced = "Ya}*Q"
+string_produced = "PfIHQ"
 
 ```
-## Path of running terraform code<a name="Path_of_running_terraform_code"></a>
+## Get path of running terraform code<a name="Get_path_of_running_terraform_code"></a>
 ```
 # This gives the path of the terraform running
 # relative to the directory in which the entry
@@ -881,7 +881,7 @@ Outputs:
 entry_terraform_path = "."
 
 ```
-## Variable templating (string interpolations)<a name="Variable_templating_(string_interpolations)"></a>
+## Variable templating (string interpolation)<a name="Variable_templating_(string_interpolation)"></a>
 ```
 # If the value you're interpolating is part of a resource
 # then Terraform will infer the dependency between the two -
@@ -930,13 +930,13 @@ Plan: 1 to add, 0 to change, 0 to destroy.
 Changes to Outputs:
   + my_string = (known after apply)
 random_string.insertion: Creating...
-random_string.insertion: Creation complete after 0s [id=qGH7%l:]
+random_string.insertion: Creation complete after 0s [id=$<EG)<X]
 
 Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 
 Outputs:
 
-my_string = "Random string value is qGH7%l:"
+my_string = "Random string value is $<EG)<X"
 
 ```
 ## JSON encoding<a name="JSON_encoding"></a>

@@ -1,27 +1,91 @@
 {
-    "Terraform HCL cheatsheet": {
-        "Loops": {
-            "for_each": {
-                "Creating resources": "for_each_resources.tf",
-                "Creating sections within a resource:": "for_each_inline_blocks.tf"
-            },
-            "count": {
-                "Multiple resources from list": "count_basic.tf",
-                "Flagging resources on and off": "count_ternary.tf"
-            },
-            "for": {
-                "Iterating over lists": "for_lists.tf",
-                "Iterating over maps": "for_maps.tf"
-            },
-            "Wildcard to reference all resources created (splat)": {
-                "Created using count": "splat_count.tf",
-                "Created using for_each": "splat_for_each.tf"
-            },
-            "For loop in a string (string directive)": "for_string_directive.tf"
+    "title": "Terraform HCL cheatsheet",
+    "sections": [
+        {
+            "title": "Loops",
+            "code": "",
+            "subsections": [
+                {
+                    "title": "for_each",
+                    "code": "",
+                    "subsubsections": [
+                        {
+                            "title": "Creating resources",
+                            "code": "for_each_resources.tf"
+                        },
+                        {
+                            "title": "Creating sections within a resource",
+                            "code": "for_each_inline_blocks.tf"
+                        }
+                    ]
+                },
+                {
+                    "title": "count",
+                    "code": "",
+                    "subsubsections": [
+                        {
+                            "title": "Multiple resources from list",
+                            "code": "count_basic.tf"
+                        },
+                        {
+                            "title": "Flagging resources on and off",
+                            "code": "count_ternary.tf"
+                        }
+                    ]
+                },
+                {
+                    "title": "for",
+                    "code": "",
+                    "subsubsections": [
+                        {
+                            "title": "Iterating over lists",
+                            "code": "for_lists.tf"
+                        },
+                        {
+                            "title": "Iterating over maps",
+                            "code": "for_maps.tf"
+                        },
+                        {
+                            "title": "For loop in a string (string directive)",
+                            "code": "for_string_directive.tf"
+                        }
+                    ]
+                },
+                {
+                    "title": "Wildcard to reference all resources created (splat)",
+                    "code": "",
+                    "subsubsections": [
+                        {
+                            "title": "Created using count",
+                            "code": "splat_count.tf"
+                        },
+                        {
+                            "title": "Created using for_each",
+                            "code": "splat_for_each.tf"
+                        }
+                    ]
+                }
+            ]
         },
-        "Ternary": "ternary.tf",
-        "Path of running terraform code": "path_to_module.tf",
-        "Variable templating (string interpolations)": "string_interpolation.tf",
-        "JSON encoding": "json_encode.tf"
-    }
+        {
+            "title": "Ternary",
+            "code": "ternary.tf",
+            "subsections": []
+        },
+        {
+            "title": "Get path of running terraform code",
+            "code": "path_to_module.tf",
+            "subsections": []
+        },
+        {
+            "title": "Variable templating (string interpolation)",
+            "code": "string_interpolation.tf",
+            "subsections": []
+        },
+        {
+            "title": "JSON encoding",
+            "code": "json_encode.tf",
+            "subsections": []
+        }
+    ]
 }

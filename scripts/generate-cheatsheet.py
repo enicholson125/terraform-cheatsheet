@@ -77,40 +77,40 @@ def get_terraform_output(filename: str):
     return output
 
 
-def get_code_example_and_output(example_filename):
-    code = add_code_block(get_file_contents(example_filename))
-    output = add_code_block(get_terraform_output(example_filename))
+def get_path_to_example_from_filename(filename):
+    # One day this will be done in a running directory
+    # agnostic day and when it is it will be super easy
+    # because it will only need to be done here
+    return f"examples/{filename}"
+
+
+def get_code_example_and_output_if_present(example_filename):
+    if example_filename == "":
+        return ""
+    filename = get_path_to_example_from_filename(example_filename)
+    code = add_code_block(get_file_contents(filename))
+    output = add_code_block(get_terraform_output(filename))
     return code + add_text("Applying this example outputs:") + output
 
 
 def generate_cheatsheet_text():
     cheatsheet_spec = load_json(CHEATSHEET_JSON)
-    cheatsheet = ""
     index = add_top_heading("Table of Contents")
-    for first_heading, second_heading in cheatsheet_spec.items():
-        cheatsheet += add_top_heading(first_heading)
-        for heading, third_heading in second_heading.items():
-            index += add_top_level_index_entry(heading)
-            cheatsheet += add_second_heading(heading)
-            # Check if section is subdivided or not
-            if type(third_heading) == str:
-                cheatsheet += get_code_example_and_output(
-                    f"examples/{third_heading}")
-            else:
-                for heading, entry in third_heading.items():
-                    if type(entry) == str:
-                        index += add_third_level_index_entry(heading)
-                        cheatsheet += add_third_heading(heading)
-                        cheatsheet += get_code_example_and_output(
-                            f"examples/{entry}")
-                    else:
-                        index += add_second_level_index_entry(heading)
-                        cheatsheet += add_third_heading(heading)
-                        for text, code_file in entry.items():
-                            index += add_third_level_index_entry(text)
-                            cheatsheet += add_fourth_heading(text)
-                            cheatsheet += get_code_example_and_output(
-                                f"examples/{code_file}")
+    cheatsheet = add_top_heading(cheatsheet_spec["title"])
+    for section in cheatsheet_spec["sections"]:
+        index += add_top_level_index_entry(section["title"])
+        cheatsheet += add_second_heading(section["title"])
+        cheatsheet += get_code_example_and_output_if_present(section["code"])
+        for subsection in section["subsections"]:
+            index += add_second_level_index_entry(subsection["title"])
+            cheatsheet += add_third_heading(subsection["title"])
+            cheatsheet += get_code_example_and_output_if_present(
+                subsection["code"])
+            for subsubsection in subsection["subsubsections"]:
+                index += add_third_level_index_entry(subsubsection["title"])
+                cheatsheet += add_fourth_heading(subsubsection["title"])
+                cheatsheet += get_code_example_and_output_if_present(
+                    subsubsection["code"])
     return index + cheatsheet
 
 
