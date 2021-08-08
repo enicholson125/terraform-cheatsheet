@@ -1,14 +1,6 @@
-import json
-import os
-import shutil
-import subprocess
+import helper_functions
 
 # TODO make so this doesn't have to be run from the root of the directory
-
-CHEATSHEET_NAME = "cheatsheet.md"
-CHEATSHEET_JSON = "cheatsheet.json"
-
-MAIN_TF_FILE = "examples/terraform/main.tf"
 
 
 def add_code_block(code: str):
@@ -47,54 +39,16 @@ def add_third_level_index_entry(entry: str):
     return f'      - [{entry}](#{entry.replace(" ", "_")})\n'
 
 
-def load_json(json_filename: str):
-    with open(json_filename, 'r') as json_file:
-        return json.load(json_file)
-
-
-def get_file_contents(filename: str):
-    with open(filename, 'r') as file:
-        return file.read()
-
-
-def get_terraform_output(filename: str):
-    tmp_dir = "tmp_terraform"
-    os.mkdir(tmp_dir)
-    try:
-        shutil.copyfile(filename, f"{tmp_dir}/example.tf")
-        shutil.copyfile(MAIN_TF_FILE, f"{tmp_dir}/main.tf")
-        subprocess.run(["terraform", f"-chdir={tmp_dir}", "init"],
-                       stdout=subprocess.PIPE)
-        output = subprocess.run(
-            ["terraform", f"-chdir={tmp_dir}",
-                "apply", "-auto-approve", "-no-color"],
-            stdout=subprocess.PIPE).stdout.decode()
-    except:  # noqa
-        # make sure we clean up the temp directory
-        shutil.rmtree(tmp_dir)
-        raise
-    shutil.rmtree(tmp_dir)
-    return output
-
-
-def get_path_to_example_from_filename(filename):
-    # One day this will be done in a running directory
-    # agnostic day and when it is it will be super easy
-    # because it will only need to be done here
-    return f"examples/{filename}"
-
-
-def get_code_example_and_output_if_present(example_filename):
-    if example_filename == "":
+def get_code_example_and_output_if_present(filename: str):
+    if filename == "":
         return ""
-    filename = get_path_to_example_from_filename(example_filename)
-    code = add_code_block(get_file_contents(filename))
-    output = add_code_block(get_terraform_output(filename))
+    code = add_code_block(helper_functions.get_file_contents(filename))
+    output = add_code_block(helper_functions.get_terraform_output(filename))
     return code + add_text("Applying this example outputs:") + output
 
 
 def generate_cheatsheet_text():
-    cheatsheet_spec = load_json(CHEATSHEET_JSON)
+    cheatsheet_spec = helper_functions.load_cheatsheet_json()
     index = add_top_heading("Table of Contents")
     cheatsheet = add_top_heading(cheatsheet_spec["title"])
     for section in cheatsheet_spec["sections"]:

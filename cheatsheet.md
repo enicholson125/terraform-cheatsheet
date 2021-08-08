@@ -119,8 +119,8 @@ Changes to Outputs:
     }
 random_string.for_each_example["5"]: Creating...
 random_string.for_each_example["2"]: Creating...
-random_string.for_each_example["2"]: Creation complete after 0s [id=tk]
-random_string.for_each_example["5"]: Creation complete after 0s [id=-G[f:]
+random_string.for_each_example["5"]: Creation complete after 0s [id=qqvSw]
+random_string.for_each_example["2"]: Creation complete after 0s [id=GL]
 
 Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
 
@@ -129,7 +129,7 @@ Outputs:
 long_string_length = 5
 strings_created = {
   "2" = {
-    "id" = "tk"
+    "id" = "GL"
     "keepers" = tomap(null) /* of string */
     "length" = 2
     "lower" = true
@@ -139,12 +139,12 @@ strings_created = {
     "min_upper" = 0
     "number" = true
     "override_special" = tostring(null)
-    "result" = "tk"
+    "result" = "GL"
     "special" = true
     "upper" = true
   }
   "5" = {
-    "id" = "-G[f:"
+    "id" = "qqvSw"
     "keepers" = tomap(null) /* of string */
     "length" = 5
     "lower" = true
@@ -154,7 +154,7 @@ strings_created = {
     "min_upper" = 0
     "number" = true
     "override_special" = tostring(null)
-    "result" = "-G[f:"
+    "result" = "qqvSw"
     "special" = true
     "upper" = true
   }
@@ -343,9 +343,9 @@ Plan: 3 to add, 0 to change, 0 to destroy.
 random_string.count_basic[2]: Creating...
 random_string.count_basic[1]: Creating...
 random_string.count_basic[0]: Creating...
-random_string.count_basic[0]: Creation complete after 0s [id=Nz]
-random_string.count_basic[1]: Creation complete after 0s [id=+S!9S]
-random_string.count_basic[2]: Creation complete after 0s [id=b]
+random_string.count_basic[0]: Creation complete after 0s [id=gi]
+random_string.count_basic[1]: Creation complete after 0s [id=ksS-[]
+random_string.count_basic[2]: Creation complete after 0s [id=q]
 
 Apply complete! Resources: 3 added, 0 changed, 0 destroyed.
 
@@ -420,14 +420,14 @@ Changes to Outputs:
       + upper            = true
     }
 random_string.test_env_only[0]: Creating...
-random_string.test_env_only[0]: Creation complete after 0s [id=k)at1]
+random_string.test_env_only[0]: Creation complete after 0s [id=YZgsu]
 
 Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 
 Outputs:
 
 test_env_only = {
-  "id" = "k)at1"
+  "id" = "YZgsu"
   "keepers" = tomap(null) /* of string */
   "length" = 5
   "lower" = true
@@ -437,7 +437,7 @@ test_env_only = {
   "min_upper" = 0
   "number" = true
   "override_special" = tostring(null)
-  "result" = "k)at1"
+  "result" = "YZgsu"
   "special" = true
   "upper" = true
 }
@@ -639,21 +639,21 @@ Changes to Outputs:
       + (known after apply),
       + (known after apply),
     ]
-random_string.splat_count[1]: Creating...
 random_string.splat_count[0]: Creating...
 random_string.splat_count[2]: Creating...
-random_string.splat_count[1]: Creation complete after 0s [id=b:FI{]
-random_string.splat_count[2]: Creation complete after 0s [id=O]
-random_string.splat_count[0]: Creation complete after 0s [id=y+]
+random_string.splat_count[1]: Creating...
+random_string.splat_count[2]: Creation complete after 0s [id=>]
+random_string.splat_count[1]: Creation complete after 0s [id=N@iB}]
+random_string.splat_count[0]: Creation complete after 0s [id=Bx]
 
 Apply complete! Resources: 3 added, 0 changed, 0 destroyed.
 
 Outputs:
 
 all_random_strings_created = [
-  "y+",
-  "b:FI{",
-  "O",
+  "Bx",
+  "N@iB}",
+  ">",
 ]
 
 ```
@@ -750,10 +750,10 @@ Changes to Outputs:
             }
         },
     ]
-random_string.for_each_splat["5"]: Creating...
 random_string.for_each_splat["2"]: Creating...
-random_string.for_each_splat["5"]: Creation complete after 0s [id=j{U#(]
-random_string.for_each_splat["2"]: Creation complete after 0s [id=GG]
+random_string.for_each_splat["5"]: Creating...
+random_string.for_each_splat["5"]: Creation complete after 0s [id=)u:xG]
+random_string.for_each_splat["2"]: Creation complete after 0s [id=b5]
 
 Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
 
@@ -762,7 +762,7 @@ Outputs:
 map_of_resources_created = [
   {
     "2" = {
-      "id" = "GG"
+      "id" = "b5"
       "keepers" = tomap(null) /* of string */
       "length" = 2
       "lower" = true
@@ -772,12 +772,12 @@ map_of_resources_created = [
       "min_upper" = 0
       "number" = true
       "override_special" = tostring(null)
-      "result" = "GG"
+      "result" = "b5"
       "special" = true
       "upper" = true
     }
     "5" = {
-      "id" = "j{U#("
+      "id" = ")u:xG"
       "keepers" = tomap(null) /* of string */
       "length" = 5
       "lower" = true
@@ -787,7 +787,7 @@ map_of_resources_created = [
       "min_upper" = 0
       "number" = true
       "override_special" = tostring(null)
-      "result" = "j{U#("
+      "result" = ")u:xG"
       "special" = true
       "upper" = true
     }
@@ -842,13 +842,13 @@ Plan: 1 to add, 0 to change, 0 to destroy.
 Changes to Outputs:
   + string_produced = (known after apply)
 random_string.longer_in_prod: Creating...
-random_string.longer_in_prod: Creation complete after 0s [id=PfIHQ]
+random_string.longer_in_prod: Creation complete after 0s [id=ag}&=]
 
 Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 
 Outputs:
 
-string_produced = "PfIHQ"
+string_produced = "ag}&="
 
 ```
 ## Get path of running terraform code<a name="Get_path_of_running_terraform_code"></a>
@@ -856,7 +856,7 @@ string_produced = "PfIHQ"
 # This gives the path of the terraform running
 # relative to the directory in which the entry
 # terraform was run.
-# This the entry terraform, so it returns '.'
+# This is the entry terraform, so it returns '.'
 # This is useful when creating and referencing
 # non-terraform files bundled into a module
 
@@ -930,13 +930,13 @@ Plan: 1 to add, 0 to change, 0 to destroy.
 Changes to Outputs:
   + my_string = (known after apply)
 random_string.insertion: Creating...
-random_string.insertion: Creation complete after 0s [id=$<EG)<X]
+random_string.insertion: Creation complete after 0s [id=damIR&g]
 
 Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 
 Outputs:
 
-my_string = "Random string value is $<EG)<X"
+my_string = "Random string value is damIR&g"
 
 ```
 ## JSON encoding<a name="JSON_encoding"></a>

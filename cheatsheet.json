@@ -11,11 +11,11 @@
                     "subsubsections": [
                         {
                             "title": "Creating resources",
-                            "code": "for_each_resources.tf"
+                            "code": "examples/for_each_resources.tf"
                         },
                         {
                             "title": "Creating sections within a resource",
-                            "code": "for_each_inline_blocks.tf"
+                            "code": "examples/for_each_inline_blocks.tf"
                         }
                     ]
                 },
@@ -25,11 +25,11 @@
                     "subsubsections": [
                         {
                             "title": "Multiple resources from list",
-                            "code": "count_basic.tf"
+                            "code": "examples/count_basic.tf"
                         },
                         {
                             "title": "Flagging resources on and off",
-                            "code": "count_ternary.tf"
+                            "code": "examples/count_ternary.tf"
                         }
                     ]
                 },
@@ -39,15 +39,15 @@
                     "subsubsections": [
                         {
                             "title": "Iterating over lists",
-                            "code": "for_lists.tf"
+                            "code": "examples/for_lists.tf"
                         },
                         {
                             "title": "Iterating over maps",
-                            "code": "for_maps.tf"
+                            "code": "examples/for_maps.tf"
                         },
                         {
                             "title": "For loop in a string (string directive)",
-                            "code": "for_string_directive.tf"
+                            "code": "examples/for_string_directive.tf"
                         }
                     ]
                 },
@@ -57,11 +57,11 @@
                     "subsubsections": [
                         {
                             "title": "Created using count",
-                            "code": "splat_count.tf"
+                            "code": "examples/splat_count.tf"
                         },
                         {
                             "title": "Created using for_each",
-                            "code": "splat_for_each.tf"
+                            "code": "examples/splat_for_each.tf"
                         }
                     ]
                 }
@@ -69,22 +69,22 @@
         },
         {
             "title": "Ternary",
-            "code": "ternary.tf",
+            "code": "examples/ternary.tf",
             "subsections": []
         },
         {
             "title": "Get path of running terraform code",
-            "code": "path_to_module.tf",
+            "code": "examples/path_to_module.tf",
             "subsections": []
         },
         {
             "title": "Variable templating (string interpolation)",
-            "code": "string_interpolation.tf",
+            "code": "examples/string_interpolation.tf",
             "subsections": []
         },
         {
             "title": "JSON encoding",
-            "code": "json_encode.tf",
+            "code": "examples/json_encode.tf",
             "subsections": []
         }
     ]
