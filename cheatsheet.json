@@ -3,56 +3,68 @@
     "sections": [
         {
             "title": "Loops",
+            "id": "loops",
             "code": "",
             "subsections": [
                 {
                     "title": "for_each",
+                    "id": "for_each",
                     "code": "",
                     "subsubsections": [
                         {
                             "title": "Creating resources",
+                            "id": "for_each_resources",
                             "code": "examples/for_each_resources.tf"
                         },
                         {
                             "title": "Creating sections within a resource",
+                            "id": "for_each_inline",
                             "code": "examples/for_each_inline_blocks.tf"
                         }
                     ]
                 },
                 {
                     "title": "count",
+                    "id": "count",
                     "code": "",
                     "subsubsections": [
                         {
                             "title": "Multiple resources from list",
+                            "id": "count_list",
                             "code": "examples/count_basic.tf"
                         },
                         {
                             "title": "Flagging resources on and off",
+                            "id": "count_ternary",
                             "code": "examples/count_ternary.tf"
                         }
                     ]
                 },
                 {
                     "title": "for",
+                    "id": "for",
                     "code": "",
                     "subsubsections": [
                         {
                             "title": "Iterating over lists",
+                            "id": "for_list_iterating",
                             "code": "examples/for_lists.tf"
                         },
                         {
                             "title": "Iterating over maps",
+                            "id": "for_map_iterating",
                             "code": "examples/for_maps.tf"
                         },
                         {
                             "title": "For loop in a string (string directive)",
+                            "id": "for_string",
                             "code": "examples/for_string_directive.tf"
                         }
                     ]
                 },
                 {
                     "title": "Wildcard to reference all resources created (splat)",
+                    "id": "wildcard",
                     "code": "",
                     "subsubsections": [
                         {
@@ -69,21 +81,25 @@
         },
         {
             "title": "Ternary",
+            "id": "ternary",
             "code": "examples/ternary.tf",
             "subsections": []
         },
         {
             "title": "Get path of running terraform code",
+            "id": "module_path",
             "code": "examples/path_to_module.tf",
             "subsections": []
         },
         {
             "title": "Variable templating (string interpolation)",
+            "id": "var_templating",
             "code": "examples/string_interpolation.tf",
             "subsections": []
         },
         {
             "title": "JSON encoding",
+            "id": "json_encode",
             "code": "examples/json_encode.tf",
             "subsections": []
         }

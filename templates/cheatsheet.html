@@ -5,10 +5,12 @@
 <div class="example-code">
     <pre><code>{{ get_example_contents(section["code"]) }}</code></pre>
 </div>
-<div class="output-button">This example produces the output:</div>
-<div class="example-output">
+<div class="output-button">
+    <button onclick="toggle_output('{{ section['id'] }}')">Run this example</button>
+</div>
+<div class="example-output hidden" id="{{ section['id'] }}">
     <pre><code>{{ get_terraform_output(section["code"]) }}</code></pre>
-</div class="example-output">
+</div>
 {%- endif %}
 {%- for subsection in section["subsections"] %}
 <h3 class="subsubtitle">{{ subsection["title"] }}</h3>
@@ -16,10 +18,12 @@
 <div class="example-code">
     <pre><code>{{ get_example_contents(subsection["code"]) }}</code></pre>
 </div>
-<div class="output-button">This example produces the output:</div>
-<div class="example-output">
+<div class="output-button">
+    <button onclick="toggle_output('{{ subsection['id'] }}')">Run this example</button>
+</div>
+<div class="example-output hidden" id="{{ subsection['id'] }}">
     <pre><code>{{ get_terraform_output(subsection["code"]) }}</code></pre>
-</div class="example-output">
+</div>
 {%- endif %}
 {%- for subsubsection in subsection["subsubsections"] %}
 <h4 class="subsubtitle">{{ subsubsection["title"] }}</h4>
@@ -27,11 +31,20 @@
 <div class="example-code">
     <pre><code>{{ get_example_contents(subsubsection["code"]) }}</code></pre>
 </div>
-<div class="output-button">This example produces the output:</div>
-<div class="example-output">
+<div class="output-button">
+    <button onclick="toggle_output('{{ subsubsection['id'] }}')">Run this example</button>
+</div>
+<div class="example-output hidden" id="{{ subsubsection['id'] }}">
     <pre><code>{{ get_terraform_output(subsubsection["code"]) }}</code></pre>
-</div class="example-output">
+</div>
 {%- endif %}
 {%- endfor %}
 {%- endfor %}
 {%- endfor %}
+
+<script>
+    function toggle_output(element_id) {
+        var outputButton = document.getElementById(element_id);
+        outputButton.classList.toggle("hidden");
+    }
+</script>
