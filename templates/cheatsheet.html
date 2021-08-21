@@ -1,50 +1,66 @@
-<h1 id="terraformconfigcheatsheet" class="title">{{ spec["title"] }}</h1>
-{%- for section in spec["sections"] %}
-<h2 class="subtitle">{{ section["title"] }}</h2>
-{%- if section["code"] != "" %}
-<div class="example-code">
-    <pre><code>{{ get_example_contents(section["code"]) }}</code></pre>
-</div>
-<div class="output-button">
-    <button onclick="toggle_output('{{ section['id'] }}')">Run this example</button>
-</div>
-<div class="example-output hidden" id="{{ section['id'] }}">
-    <pre><code>{{ get_terraform_output(section["code"]) }}</code></pre>
-</div>
-{%- endif %}
-{%- for subsection in section["subsections"] %}
-<h3 class="subsubtitle">{{ subsection["title"] }}</h3>
-{%- if subsection["code"] != "" %}
-<div class="example-code">
-    <pre><code>{{ get_example_contents(subsection["code"]) }}</code></pre>
-</div>
-<div class="output-button">
-    <button onclick="toggle_output('{{ subsection['id'] }}')">Run this example</button>
-</div>
-<div class="example-output hidden" id="{{ subsection['id'] }}">
-    <pre><code>{{ get_terraform_output(subsection["code"]) }}</code></pre>
-</div>
-{%- endif %}
-{%- for subsubsection in subsection["subsubsections"] %}
-<h4 class="subsubtitle">{{ subsubsection["title"] }}</h4>
-{%- if subsubsection["code"] != "" %}
-<div class="example-code">
-    <pre><code>{{ get_example_contents(subsubsection["code"]) }}</code></pre>
-</div>
-<div class="output-button">
-    <button onclick="toggle_output('{{ subsubsection['id'] }}')">Run this example</button>
-</div>
-<div class="example-output hidden" id="{{ subsubsection['id'] }}">
-    <pre><code>{{ get_terraform_output(subsubsection["code"]) }}</code></pre>
-</div>
-{%- endif %}
-{%- endfor %}
-{%- endfor %}
-{%- endfor %}
+<!doctype html>
+<html lang="en">
 
-<script>
-    function toggle_output(element_id) {
-        var outputButton = document.getElementById(element_id);
-        outputButton.classList.toggle("hidden");
-    }
-</script>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="cheatsheet.css">
+    <title>Terraform Cheatsheet</title>
+</head>
+
+<body>
+    <h1 id="terraformconfigcheatsheet" class="title">{{ spec["title"] }}</h1>
+    {%- for section in spec["sections"] %}
+    <h2 class="subtitle">{{ section["title"] }}</h2>
+    {%- if section["code"] != "" %}
+    <div class="example-code">
+        <pre><code>{{ get_example_contents(section["code"]) }}</code></pre>
+    </div>
+    <div class="output-button">
+        <button onclick="toggle_output('{{ section['id'] }}')">Run this example</button>
+    </div>
+    <div class="example-output hidden" id="{{ section['id'] }}">
+        <pre><code>{{ get_terraform_output(section["code"]) }}</code></pre>
+    </div>
+    {%- endif %}
+    {%- for subsection in section["subsections"] %}
+    <h3 class="subsubtitle">{{ subsection["title"] }}</h3>
+    {%- if subsection["code"] != "" %}
+    <div class="example-code">
+        <pre><code>{{ get_example_contents(subsection["code"]) }}</code></pre>
+    </div>
+    <div class="output-button">
+        <button onclick="toggle_output('{{ subsection['id'] }}')">Run this example</button>
+    </div>
+    <div class="example-output hidden" id="{{ subsection['id'] }}">
+        <pre><code>{{ get_terraform_output(subsection["code"]) }}</code></pre>
+    </div>
+    {%- endif %}
+    {%- for subsubsection in subsection["subsubsections"] %}
+    <h4 class="subsubtitle">{{ subsubsection["title"] }}</h4>
+    {%- if subsubsection["code"] != "" %}
+    <div class="example-code">
+        <pre><code>{{ get_example_contents(subsubsection["code"]) }}</code></pre>
+    </div>
+    <div class="output-button">
+        <button onclick="toggle_output('{{ subsubsection['id'] }}')">Run this example</button>
+    </div>
+    <div class="example-output hidden" id="{{ subsubsection['id'] }}">
+        <pre><code>{{ get_terraform_output(subsubsection["code"]) }}</code></pre>
+    </div>
+    {%- endif %}
+    {%- endfor %}
+    {%- endfor %}
+    {%- endfor %}
+
+    <script>
+        function toggle_output(element_id) {
+            var outputButton = document.getElementById(element_id);
+            outputButton.classList.toggle("hidden");
+        }
+    </script>
+</body>
+
+</html>
