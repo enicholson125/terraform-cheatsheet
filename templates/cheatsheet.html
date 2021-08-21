@@ -12,42 +12,63 @@
 
 <body>
     <h1 id="terraformconfigcheatsheet" class="title">{{ spec["title"] }}</h1>
+
+    <div class="tableofcontents">
+        <h2 class="subtitle">Table of Contents</h2>
+        <ul>
+            {%- for section in spec["sections"] %}
+            <li><a href="#{{ section['id'] }}">{{ section ["title"] }}</a></li>
+            <ul>
+                {%- for subsection in section["subsections"] %}
+                <li><a href="#{{ subsection['id'] }}">{{ subsection ["title"] }}</a></li>
+                <ul>
+                    {%- for subsubsection in subsection["subsubsections"] %}
+                    <li><a href="#{{ subsubsection['id'] }}">{{ subsubsection ["title"] }}</a></li>
+                    {%- endfor %}
+                </ul>
+                {%- endfor %}
+            </ul>
+            {%- endfor %}
+        </ul>
+    </div>
+
+
     {%- for section in spec["sections"] %}
-    <h2 class="subtitle">{{ section["title"] }}</h2>
+    <h2 class="subtitle" id="{{ section['id'] }}">{{ section["title"] }}</h2>
     {%- if section["code"] != "" %}
     <div class="example-code">
         <pre><code>{{ get_example_contents(section["code"]) }}</code></pre>
     </div>
     <div class="output-button">
-        <button onclick="toggle_output('{{ section['id'] }}')">Run this example</button>
+        <button onclick="toggle_output('{{ section['id'] }}_output')">Run this example</button>
     </div>
-    <div class="example-output hidden" id="{{ section['id'] }}">
+    <div class="example-output hidden" id="{{ section['id'] }}_output">
         <pre><code>{{ get_terraform_output(section["code"]) }}</code></pre>
     </div>
     {%- endif %}
     {%- for subsection in section["subsections"] %}
-    <h3 class="subsubtitle">{{ subsection["title"] }}</h3>
+    <h3 class="subsubtitle" id="{{ subsection['id'] }}">{{ subsection["title"] }}</h3>
     {%- if subsection["code"] != "" %}
     <div class="example-code">
         <pre><code>{{ get_example_contents(subsection["code"]) }}</code></pre>
     </div>
     <div class="output-button">
-        <button onclick="toggle_output('{{ subsection['id'] }}')">Run this example</button>
+        <button onclick="toggle_output('{{ subsection['id'] }}_output')">Run this example</button>
     </div>
-    <div class="example-output hidden" id="{{ subsection['id'] }}">
+    <div class="example-output hidden" id="{{ subsection['id'] }}_output">
         <pre><code>{{ get_terraform_output(subsection["code"]) }}</code></pre>
     </div>
     {%- endif %}
     {%- for subsubsection in subsection["subsubsections"] %}
-    <h4 class="subsubtitle">{{ subsubsection["title"] }}</h4>
+    <h4 class="subsubtitle" id="{{ subsubsection['id'] }}">{{ subsubsection["title"] }}</h4>
     {%- if subsubsection["code"] != "" %}
     <div class="example-code">
         <pre><code>{{ get_example_contents(subsubsection["code"]) }}</code></pre>
     </div>
     <div class="output-button">
-        <button onclick="toggle_output('{{ subsubsection['id'] }}')">Run this example</button>
+        <button onclick="toggle_output('{{ subsubsection['id'] }}_output')">Run this example</button>
     </div>
-    <div class="example-output hidden" id="{{ subsubsection['id'] }}">
+    <div class="example-output hidden" id="{{ subsubsection['id'] }}_output">
         <pre><code>{{ get_terraform_output(subsubsection["code"]) }}</code></pre>
     </div>
     {%- endif %}
