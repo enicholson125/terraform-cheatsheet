@@ -69,10 +69,12 @@
                     "subsubsections": [
                         {
                             "title": "Created using count",
+                            "id": "created_using_count",
                             "code": "examples/splat_count.tf"
                         },
                         {
                             "title": "Created using for_each",
+                            "id": "created_using_for_each",
                             "code": "examples/splat_for_each.tf"
                         }
                     ]
@@ -102,6 +104,37 @@
             "id": "json_encode",
             "code": "examples/json_encode.tf",
             "subsections": []
+        },
+        {
+            "title": "Modules",
+            "id": "modules",
+            "code": "",
+            "subsections": [
+                {
+                    "title": "Creating a module",
+                    "id": "create_module",
+                    "code": "examples/create_module.tf",
+                    "top_tips": [
+                        "Don't define a provider configuration inside a module. Provider configuration can't be deleted until all dependent resources have been deleted, so a module containing its own provider configuration can only be deleted by editing the module to remove the components, then removing the module. Much easier to provide the configuration upstream!",
+                        "Variable conditions are particularly useful in modules, to prevent users of the module from making mistakes and providing extra information if they do."
+                    ],
+                    "subsubsections": []
+                },
+                {
+                    "title": "Referencing a module",
+                    "id": "reference_module",
+                    "code": "examples/reference_module.tf",
+                    "top_tips": [],
+                    "subsubsections": []
+                },
+                {
+                    "title": "Getting module outputs",
+                    "id": "module_outputs",
+                    "code": "examples/module_outputs.tf",
+                    "top_tips": [],
+                    "subsubsections": []
+                }
+            ]
         }
     ]
 }
