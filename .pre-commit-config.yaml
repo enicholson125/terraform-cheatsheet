@@ -1,0 +1,29 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.3.0
+    hooks:
+      - id: check-case-conflict
+      - id: check-json
+      - id: check-yaml
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+
+  - repo: local
+    hooks:
+      - id: shellcheck
+        name: shellcheck
+        stages: [commit]
+        language: system
+        types: [shell] # as per https://pre-commit.com/#filtering-files-with-types
+        entry: pipenv run shellcheck --enable=all --shell=bash --severity=error
+
+      - id: terraform
+        name: terraform
+        stages: [commit]
+        language: system
+        types: [terraform]
+        # doesn't accept filename parameters
+        entry: terraform fmt -write=true -diff -recursive
+        pass_filenames: false
+        always_run: true

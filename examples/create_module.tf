@@ -16,7 +16,7 @@ terraform {
 # parameterise what the module creates
 variable "example_string_length" {
   description = "The length of string to create in this module."
-  type = number
+  type        = number
 }
 
 resource "random_string" "example_string" {
