@@ -42,9 +42,11 @@
     <div class="output-button">
         <button onclick="toggle_output('{{ section['id'] }}_output')">Run this example</button>
     </div>
+    {%- if section.get("run_code", true) %}
     <div class="example-output hidden" id="{{ section['id'] }}_output">
         <pre><code>{{ get_terraform_output(section["code"]) }}</code></pre>
     </div>
+    {%- endif %}
     {%- endif %}
     {%- for subsection in section["subsections"] %}
     <h3 class="subsubtitle" id="{{ subsection['id'] }}">{{ subsection["title"] }}</h3>
@@ -55,9 +57,11 @@
     <div class="output-button">
         <button onclick="toggle_output('{{ subsection['id'] }}_output')">Run this example</button>
     </div>
+    {%- if subsection.get("run_code", true) %}
     <div class="example-output hidden" id="{{ subsection['id'] }}_output">
         <pre><code>{{ get_terraform_output(subsection["code"]) }}</code></pre>
     </div>
+    {%- endif %}
     {%- endif %}
     {%- for subsubsection in subsection["subsubsections"] %}
     <h4 class="subsubtitle" id="{{ subsubsection['id'] }}">{{ subsubsection["title"] }}</h4>
@@ -68,9 +72,11 @@
     <div class="output-button">
         <button onclick="toggle_output('{{ subsubsection['id'] }}_output')">Run this example</button>
     </div>
+    {%- if subsubsection.get("run_code", true) %}
     <div class="example-output hidden" id="{{ subsubsection['id'] }}_output">
         <pre><code>{{ get_terraform_output(subsubsection["code"]) }}</code></pre>
     </div>
+    {%- endif %}
     {%- endif %}
     {%- endfor %}
     {%- endfor %}

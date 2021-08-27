@@ -114,6 +114,7 @@
                     "title": "Creating a module",
                     "id": "create_module",
                     "code": "examples/create_module.tf",
+                    "run_code": false,
                     "top_tips": [
                         "Don't define a provider configuration inside a module. Provider configuration can't be deleted until all dependent resources have been deleted, so a module containing its own provider configuration can only be deleted by editing the module to remove the components, then removing the module. Much easier to provide the configuration upstream!",
                         "Variable conditions are particularly useful in modules, to prevent users of the module from making mistakes and providing extra information if they do."
@@ -123,9 +124,15 @@
                 {
                     "title": "Referencing a module",
                     "id": "reference_module",
-                    "code": "examples/reference_module.tf",
+                    "code": "examples/reference_module_basic.tf",
                     "top_tips": [],
-                    "subsubsections": []
+                    "subsubsections": [
+                        {
+                            "title": "With Git",
+                            "id": "module_with_git",
+                            "code": "examples/reference_module_git.tf"
+                        }
+                    ]
                 },
                 {
                     "title": "Getting module outputs",
