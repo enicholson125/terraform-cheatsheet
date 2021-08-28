@@ -20,7 +20,7 @@ variable "example_string_length" {
 }
 
 resource "random_string" "example_string" {
-  length = var.random_string_length
+  length = var.example_string_length
 }
 
 # Outputs aren't required for a module but allows the module
