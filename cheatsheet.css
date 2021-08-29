@@ -54,4 +54,5 @@
 
 .hidden {
     visibility: collapse;
+    display: none;
 }

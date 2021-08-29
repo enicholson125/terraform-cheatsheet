@@ -17,10 +17,11 @@ terraform {
 variable "example_string_length" {
   description = "The length of string to create in this module."
   type        = number
+  default     = 5
 }
 
 resource "random_string" "example_string" {
-  length = var.random_string_length
+  length = var.example_string_length
 }
 
 # Outputs aren't required for a module but allows the module
