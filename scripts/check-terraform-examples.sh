@@ -17,6 +17,8 @@ for filename in *.tf; do
     if ! [[ $NO_MAIN_FILE_EXAMPLES =~ .*${filename}.* ]]; then
         cp terraform/main.tf tmp_tf_dir/
     fi
+    mkdir tmp_tf_dir/example_module
+    cp terraform/example_module/main.tf tmp_tf_dir/example_module/
     cp $filename tmp_tf_dir/
     terraform -chdir=tmp_tf_dir init
     terraform -chdir=tmp_tf_dir fmt -check
