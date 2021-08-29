@@ -536,7 +536,7 @@ Applying this example outputs:
 
 Changes to Outputs:
   + for_within_string = <<-EOT
-        
+
           apple
           tangerine
           mango
@@ -989,4 +989,3 @@ Outputs:
 example_json_policy = "{\"Statement\":[{\"Action\":[\"ec2:Describe*\"],\"Effect\":\"Allow\",\"Resource\":\"*\"}],\"Version\":\"2012-10-17\"}"
 
 ```
-
