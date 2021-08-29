@@ -4,6 +4,7 @@ import subprocess
 import json
 
 MAIN_TF_FILE = "examples/terraform/main.tf"
+EXAMPLE_MODULE_FILE = "examples/example_module/main.tf"
 CHEATSHEET_JSON = "cheatsheet.json"
 
 
@@ -27,6 +28,9 @@ def get_terraform_output(filename: str):
     try:
         shutil.copyfile(filename, f"{tmp_dir}/example.tf")
         shutil.copyfile(MAIN_TF_FILE, f"{tmp_dir}/main.tf")
+        example_module_path = f"{tmp_dir}/example_module"
+        os.mkdir(example_module_path)
+        shutil.copyfile(EXAMPLE_MODULE_FILE, f"{example_module_path}/main.tf")
         subprocess.run(["terraform", f"-chdir={tmp_dir}", "init"],
                        stdout=subprocess.PIPE)
         output = subprocess.run(

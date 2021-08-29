@@ -1,7 +1,7 @@
 # You may notice this module looks like
 # a normal piece of terraform configuration.
 # That's because it is: modules are just
-# terraform configurations in a different location
+# terraform configurations in a different directory
 
 terraform {
   required_providers {

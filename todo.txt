@@ -1,4 +1,0 @@
-TODO
- - Make separate website hosting cheatsheet
- - Finish pulling examples into their own terraform files
- - Tidy up examples - use a single theme and don't require cloud creds for provider

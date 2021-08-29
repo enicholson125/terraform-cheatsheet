@@ -128,9 +128,14 @@
                     "top_tips": [],
                     "subsubsections": [
                         {
-                            "title": "With Git",
+                            "title": "Module in Github",
                             "id": "module_with_git",
                             "code": "examples/reference_module_git.tf"
+                        },
+                        {
+                            "title": "Module in Github - specific commit",
+                            "id": "module_with_git_commit",
+                            "code": "examples/reference_module_git_commit.tf"
                         }
                     ]
                 },
