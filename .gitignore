@@ -1,7 +1,8 @@
 .terraform
 .terraform.lock.hcl
 example.zip
-terraform.tfstate
+terraform.tfstate*
+terraform.auto.tfvars
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
