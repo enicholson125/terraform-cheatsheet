@@ -4,13 +4,16 @@
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://unpkg.com/papercss@1.8.2/dist/paper.min.css">
     <link rel="stylesheet" href="cheatsheet.css">
     <title>Terraform Cheatsheet</title>
 </head>
 
 <body>
+    <div class="paper container">
     <h1 id="terraformconfigcheatsheet" class="title">{{ spec["title"] }}</h1>
 
     <div class="tableofcontents">
@@ -82,12 +85,23 @@
     {%- endfor %}
     {%- endfor %}
 
+    <div>
+        Styled with the excellent PaperCSS
+    </div>
+
     <script>
         function toggle_output(element_id) {
             var outputButton = document.getElementById(element_id);
             outputButton.classList.toggle("hidden");
         }
     </script>
+    </div>
+
+    <div class="paper container footnote">
+      <div class="footnote-link">
+      Styled with the excellent <a href="https://www.getpapercss.com/">Paper CSS</a> framework
+    </div>
+    </div>
 </body>
 
 </html>

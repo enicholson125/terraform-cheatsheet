@@ -56,3 +56,15 @@
     visibility: collapse;
     display: none;
 }
+
+.footnote {
+    padding: 20px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+.footnote-link {
+    display: inline;
+}
