@@ -43,10 +43,30 @@ resource "google_storage_bucket" "website" {
   #   }
 }
 
-# resource "google_storage_bucket_object" "index_css" {
-#   name   = "index.css"
-#   source = "../src/index.css"
-#   bucket = google_storage_bucket.website.name
+resource "google_storage_bucket_object" "index" {
+  name   = "index.html"
+  source = "../index.html"
+  bucket = google_storage_bucket.website.name
+}
 
-#   content_type = "text/css"
-# }
+resource "google_storage_bucket_object" "css" {
+  name   = "cheatsheet.css"
+  source = "../cheatsheet.css"
+  bucket = google_storage_bucket.website.name
+
+  content_type = "text/css"
+}
+
+resource "google_storage_object_access_control" "index_rule" {
+  object = google_storage_bucket_object.index.output_name
+  bucket = google_storage_bucket.website.name
+  role   = "READER"
+  entity = "allUsers"
+}
+
+resource "google_storage_object_access_control" "css_rule" {
+  object = google_storage_bucket_object.css.output_name
+  bucket = google_storage_bucket.website.name
+  role   = "READER"
+  entity = "allUsers"
+}
