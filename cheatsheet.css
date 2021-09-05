@@ -42,6 +42,8 @@
     align-items: center;
     display: flex;
     height: 100%;
+    overflow-x: auto;
+    width: 100%;
 }
 
 .example-code {
@@ -50,6 +52,12 @@
     align-items: center;
     display: flex;
     height: 100%;
+    overflow-x: auto;
+    width: 100%;
+}
+
+pre {
+    width: 100%;
 }
 
 .hidden {

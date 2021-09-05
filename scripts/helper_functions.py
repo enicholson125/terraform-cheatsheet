@@ -4,7 +4,7 @@ import subprocess
 import json
 
 MAIN_TF_FILE = "examples/terraform/main.tf"
-EXAMPLE_MODULE_FILE = "examples/example_module/main.tf"
+EXAMPLE_MODULE_FILE = "example_module/main.tf"
 CHEATSHEET_JSON = "cheatsheet.json"
 
 

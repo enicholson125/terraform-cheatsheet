@@ -88,7 +88,7 @@
             "subsections": []
         },
         {
-            "title": "Get path of running terraform code",
+            "title": "Path to terraform directory",
             "id": "module_path",
             "code": "examples/path_to_module.tf",
             "subsections": []
