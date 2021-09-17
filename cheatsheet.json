@@ -147,6 +147,42 @@
                     "subsubsections": []
                 }
             ]
+        },
+        {
+            "title": "Version Constraints",
+            "id": "version_constraints",
+            "code": "",
+            "text": "The version constraint syntax applies to all versions in Terraform configuration including provider, module and Terraform versions.",
+            "subsections": [
+                {
+                    "title": "Version exactly equal to",
+                    "id": "version_strict",
+                    "code": "examples/version_constraint_strict.tf",
+                    "run_code": false,
+                    "subsubsections": []
+                },
+                {
+                    "title": "Version approximately equal to",
+                    "id": "version_approx",
+                    "code": "examples/version_constraint_approx.tf",
+                    "run_code": false,
+                    "subsubsections": []
+                },
+                {
+                    "title": "Version greater than",
+                    "id": "version_greater",
+                    "code": "examples/version_constraint_greater_than.tf",
+                    "run_code": false,
+                    "subsubsections": []
+                },
+                {
+                    "title": "Combining version constraints",
+                    "id": "version_combo",
+                    "code": "examples/version_constraint_combo.tf",
+                    "run_code": false,
+                    "subsubsections": []
+                }
+            ]
         }
     ]
 }
