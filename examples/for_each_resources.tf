@@ -14,5 +14,5 @@ output "strings_created" {
 }
 
 output "long_string_length" {
-  value = random_string.for_each_example["5"].length # 5
+  value = random_string.for_each_example["5"].length # Should be 5
 }

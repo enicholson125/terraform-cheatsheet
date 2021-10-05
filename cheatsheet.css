@@ -1,19 +1,16 @@
 .title {
-    flex-direction: column;
     justify-content: center;
     text-align: center;
     padding: 20px;
 }
 
 .tableofcontents {
-    flex-direction: column;
     justify-content: center;
     text-align: left;
     padding: 20px;
 }
 
 .subtitle {
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     display: flex;
@@ -21,15 +18,28 @@
 }
 
 .subsubtitle {
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     display: flex;
     height: 100%;
 }
 
-.output-button {
+.cheatsheet {
+    display: flex;
     flex-direction: column;
+}
+
+.linked-heading {
+    flex-direction: row;
+}
+
+.link-button {
+    font-size: .75rem;
+    padding: .5rem;
+    border: none;
+}
+
+.output-button {
     justify-content: center;
     align-items: center;
     display: flex;
@@ -37,7 +47,6 @@
 }
 
 .example-output {
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     display: flex;
@@ -47,7 +56,6 @@
 }
 
 .example-code {
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     display: flex;

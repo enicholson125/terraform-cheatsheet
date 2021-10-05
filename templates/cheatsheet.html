@@ -37,7 +37,12 @@
 
 
         {%- for section in spec["sections"] %}
-        <h2 class="subtitle" id="{{ section['id'] }}">{{ section["title"] }}</h2>
+        <div class="linked-heading">
+            <h2 class="subtitle" id="{{ section['id'] }}">
+                {{ section["title"] }}
+                <button class="link-button" onclick="copy_link_to_clipboard('{{ section['id'] }}')">&#x1F517;</button>
+            </h2>
+        </div>
         {%- if section["code"] != "" %}
         <div class="example-code">
             <pre><code>{{ get_example_contents(section["code"]) }}</code></pre>
@@ -52,7 +57,13 @@
         {%- endif %}
         {%- endif %}
         {%- for subsection in section["subsections"] %}
-        <h3 class="subsubtitle" id="{{ subsection['id'] }}">{{ subsection["title"] }}</h3>
+        <div class="linked-heading">
+            <h3 class="subsubtitle" id="{{ subsection['id'] }}">
+                {{ subsection["title"] }}
+                <button class="link-button"
+                    onclick="copy_link_to_clipboard('{{ subsection['id'] }}')">&#x1F517;</button>
+            </h3>
+        </div>
         {%- if subsection["code"] != "" %}
         <div class="example-code">
             <pre><code>{{ get_example_contents(subsection["code"]) }}</code></pre>
@@ -67,7 +78,14 @@
         {%- endif %}
         {%- endif %}
         {%- for subsubsection in subsection["subsubsections"] %}
-        <h4 class="subsubtitle" id="{{ subsubsection['id'] }}">{{ subsubsection["title"] }}</h4>
+        <div class="linked-heading">
+            <h4 class="subsubtitle" id="{{ subsubsection['id'] }}">
+                {{ subsubsection["title"] }}
+                <button class="link-button" onclick="copy_link_to_clipboard('{{ subsubsection['id'] }}')">
+                    &#x1F517;
+                </button>
+            </h4>
+        </div>
         {%- if subsubsection["code"] != "" %}
         <div class="example-code">
             <pre><code>{{ get_example_contents(subsubsection["code"]) }}</code></pre>
@@ -89,6 +107,11 @@
             function toggle_output(element_id) {
                 var outputButton = document.getElementById(element_id);
                 outputButton.classList.toggle("hidden");
+            }
+        </script>
+        <script>
+            function copy_link_to_clipboard(element_id) {
+                navigator.clipboard.writeText("https://terraform-cheatsheet.uk#" + element_id);
             }
         </script>
     </div>
