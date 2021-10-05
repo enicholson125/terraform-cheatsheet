@@ -9,6 +9,15 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://unpkg.com/papercss@1.8.2/dist/paper.min.css">
     <link rel="stylesheet" href="cheatsheet.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/highlight.min.js"></script>
+    <script type="text/javascript" src="terraform.js"></script>
+    <script type="text/javascript">
+        hljs.registerLanguage('terraform', window.hljsDefineTerraform);
+        hljs.highlightAll();
+    </script>
+
     <title>Terraform Cheatsheet</title>
 </head>
 
@@ -52,7 +61,7 @@
             <button onclick="toggle_output('{{ section['id'] }}_output')">Run this example</button>
         </div>
         <div class="example-output hidden" id="{{ section['id'] }}_output">
-            <pre><code>{{ get_terraform_output(section["code"]) }}</code></pre>
+            <pre><code class="nohighlight">{{ get_terraform_output(section["code"]) }}</code></pre>
         </div>
         {%- endif %}
         {%- endif %}
@@ -73,7 +82,7 @@
             <button onclick="toggle_output('{{ subsection['id'] }}_output')">Run this example</button>
         </div>
         <div class="example-output hidden" id="{{ subsection['id'] }}_output">
-            <pre><code>{{ get_terraform_output(subsection["code"]) }}</code></pre>
+            <pre><code class="nohighlight">{{ get_terraform_output(subsection["code"]) }}</code></pre>
         </div>
         {%- endif %}
         {%- endif %}
@@ -95,7 +104,7 @@
             <button onclick="toggle_output('{{ subsubsection['id'] }}_output')">Run this example</button>
         </div>
         <div class="example-output hidden" id="{{ subsubsection['id'] }}_output">
-            <pre><code>{{ get_terraform_output(subsubsection["code"]) }}</code></pre>
+            <pre><code class="nohighlight">{{ get_terraform_output(subsubsection["code"]) }}</code></pre>
         </div>
         {%- endif %}
         {%- endif %}

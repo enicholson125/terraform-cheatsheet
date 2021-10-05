@@ -12,9 +12,9 @@ resource "random_string" "prod_env_only" {
   length = 5
 }
 
+# We need a ternary here or the terraform will fail to plan when
+# var.env != "test" because random_string.test_env_only[0] will not exist
 output "test_env_only" {
-  # We need this ternary or the terraform will fail to plan when
-  # var.env != "test" (because random_string.test_env_only[0] will not exist)
   value = var.env == "test" ? random_string.test_env_only[0] : null
 }
 
