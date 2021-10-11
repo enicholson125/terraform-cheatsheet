@@ -5,8 +5,20 @@ The cheatsheet is specified in json, with the terraform examples as terraform fi
 
 ## To generate cheatsheet HTML
 
+Clone this repository then from within the repository run
+
 ```bash
 python scripts/generate-html.py
+```
+
+## To run the cheatsheet locally in a Docker container
+
+Clone this repository then from root of the repository run
+
+```bash
+python scripts/generate-html.py > index.html
+docker build -t test-cheatsheat .
+docker run -it -p 8080:80 test-cheatsheet
 ```
 
 ## To set up pre-commit hooks
