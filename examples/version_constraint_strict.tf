@@ -1,6 +1,6 @@
 # This specifies that the only allowed Terraform version for this
-# config is 0.15.7
+# config is 0.15.5
 
 terraform {
-  required_version = "0.15.7"
+  required_version = "0.15.5"
 }
