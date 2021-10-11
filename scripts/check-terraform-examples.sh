@@ -7,7 +7,7 @@ function cleanup {
   rm -rf tmp_tf_dir
 }
 
-NO_MAIN_FILE_EXAMPLES="create_module.tf version_constraint_approx.tf version_constraint_combo.tf version_constraint_greater_than.tf version_constraint_strict.tf"
+NO_MAIN_FILE_EXAMPLES="create_module.tfversion_constraint_approx.tfversion_constraint_combo.tfversion_constraint_greater_than.tfversion_constraint_strict.tf"
 
 # TODO script currently has to be run from the top of the repo - fix
 for filename in *.tf; do

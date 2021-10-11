@@ -13,12 +13,12 @@
                     "subsubsections": [
                         {
                             "title": "Creating resources from a list",
-                            "id": "for_each_resources",
+                            "id": "for_each_resources_list",
                             "code": "examples/for_each_resources_list.tf"
                         },
                         {
                             "title": "Creating resources from a map",
-                            "id": "for_each_resources",
+                            "id": "for_each_resources_map",
                             "code": "examples/for_each_resources_map.tf"
                         },
                         {
