@@ -51,12 +51,12 @@
                     "code": "",
                     "subsubsections": [
                         {
-                            "title": "Iterating over lists",
+                            "title": "Iterate over lists",
                             "id": "for_list_iterating",
                             "code": "examples/for_lists.tf"
                         },
                         {
-                            "title": "Iterating over maps",
+                            "title": "Iterate over maps",
                             "id": "for_map_iterating",
                             "code": "examples/for_maps.tf"
                         },
@@ -64,6 +64,11 @@
                             "title": "For loop in a string (string directive)",
                             "id": "for_string",
                             "code": "examples/for_string_directive.tf"
+                        },
+                        {
+                            "title": "Iterate over property of resource",
+                            "id": "for_property_iteration",
+                            "code": "examples/for_sub_values.tf"
                         }
                     ]
                 },

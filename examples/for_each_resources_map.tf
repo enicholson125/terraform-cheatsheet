@@ -13,7 +13,7 @@ resource "random_pet" "for_each_example" {
 }
 
 output "prefixed_pets_created" {
-  # Outputs a map of the string resources, keyed by the var.pet_prefixes_and_lengths keys
+  # Outputs a map of the resources, keyed by the var.pet_prefixes_and_lengths keys
   value = random_pet.for_each_example
 }
 
