@@ -3,5 +3,5 @@ resource "random_pet" "my_animals" {
 }
 
 output "farm_register" {
-  value = [ for pet in random_pet.my_animals[*] : pet.id ]
+  value = [for pet in random_pet.my_animals[*] : pet.id]
 }
