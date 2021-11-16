@@ -116,6 +116,29 @@
             "subsections": []
         },
         {
+            "title": "Variable validation",
+            "id": "variable_validation",
+            "code": "",
+            "subsections": [
+                {
+                    "title": "Basic validation",
+                    "id": "basic_validation",
+                    "code": "examples/variable_validation_basic.tf",
+                    "run_code": false,
+                    "top_tips": [],
+                    "subsubsections": []
+                },
+                {
+                    "title": "Check strings in list match regex",
+                    "id": "regex_list_validation",
+                    "code": "examples/variable_validation_regex_list.tf",
+                    "run_code": false,
+                    "top_tips": [],
+                    "subsubsections": []
+                }
+            ]
+        },
+        {
             "title": "Modules",
             "id": "modules",
             "code": "",
