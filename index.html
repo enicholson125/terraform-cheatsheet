@@ -1,0 +1,1831 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://unpkg.com/papercss@1.8.2/dist/paper.min.css">
+    <link rel="stylesheet" href="cheatsheet.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/highlight.min.js"></script>
+    <script type="text/javascript" src="terraform.js"></script>
+    <script type="text/javascript">
+        hljs.registerLanguage('terraform', window.hljsDefineTerraform);
+        hljs.highlightAll();
+    </script>
+
+    <title>Terraform Cheatsheet</title>
+</head>
+
+<body>
+    <div class="paper container">
+        <h1 id="terraformconfigcheatsheet" class="title">Terraform HCL cheatsheet</h1>
+
+        <div class="tableofcontents">
+            <h2 class="subtitle">Table of Contents</h2>
+            <ul>
+                <li><a href="#loops">Loops</a></li>
+                <ul>
+                    <li><a href="#for_each">for_each</a></li>
+                    <ul>
+                        <li><a href="#for_each_resources_list">Creating resources from a list</a></li>
+                        <li><a href="#for_each_resources_map">Creating resources from a map</a></li>
+                        <li><a href="#for_each_inline">Creating sections within a resource</a></li>
+                    </ul>
+                    <li><a href="#count">count</a></li>
+                    <ul>
+                        <li><a href="#count_list">Multiple resources from list</a></li>
+                        <li><a href="#count_ternary">Flagging resources on and off</a></li>
+                    </ul>
+                    <li><a href="#for">for</a></li>
+                    <ul>
+                        <li><a href="#for_list_iterating">Iterate over lists</a></li>
+                        <li><a href="#for_map_iterating">Iterate over maps</a></li>
+                        <li><a href="#for_string">For loop in a string (string directive)</a></li>
+                        <li><a href="#for_property_iteration">Get property of iterated resource</a></li>
+                    </ul>
+                    <li><a href="#wildcard">Wildcard to reference all resources created (splat)</a></li>
+                    <ul>
+                        <li><a href="#created_using_count">Created using count</a></li>
+                        <li><a href="#created_using_for_each">Created using for_each</a></li>
+                    </ul>
+                </ul>
+                <li><a href="#ternary">Ternary</a></li>
+                <ul>
+                </ul>
+                <li><a href="#module_path">Path to terraform directory</a></li>
+                <ul>
+                </ul>
+                <li><a href="#var_templating">Variable templating (string interpolation)</a></li>
+                <ul>
+                </ul>
+                <li><a href="#json_encode">JSON encoding</a></li>
+                <ul>
+                </ul>
+                <li><a href="#variable_validation">Variable validation</a></li>
+                <ul>
+                    <li><a href="#basic_validation">Basic validation</a></li>
+                    <ul>
+                    </ul>
+                    <li><a href="#regex_list_validation">Check strings in list match regex</a></li>
+                    <ul>
+                    </ul>
+                </ul>
+                <li><a href="#modules">Modules</a></li>
+                <ul>
+                    <li><a href="#create_module">Creating a module</a></li>
+                    <ul>
+                    </ul>
+                    <li><a href="#reference_module">Referencing a module</a></li>
+                    <ul>
+                        <li><a href="#module_with_git">Module in Github</a></li>
+                        <li><a href="#module_with_git_commit">Module in Github - specific commit</a></li>
+                    </ul>
+                    <li><a href="#module_outputs">Getting module outputs</a></li>
+                    <ul>
+                    </ul>
+                </ul>
+                <li><a href="#version_constraints">Version Constraints</a></li>
+                <ul>
+                    <li><a href="#version_strict">Version exactly equal to</a></li>
+                    <ul>
+                    </ul>
+                    <li><a href="#version_approx">Version approximately equal to</a></li>
+                    <ul>
+                    </ul>
+                    <li><a href="#version_greater">Version greater than</a></li>
+                    <ul>
+                    </ul>
+                    <li><a href="#version_combo">Combining version constraints</a></li>
+                    <ul>
+                    </ul>
+                </ul>
+            </ul>
+        </div>
+        <div class="linked-heading">
+            <h2 class="subtitle" id="loops">
+                Loops
+                <button class="link-button" onclick="copy_link_to_clipboard('loops')">&#x1F517;</button>
+            </h2>
+        </div>
+        <div class="linked-heading">
+            <h3 class="subsubtitle" id="for_each">
+                for_each
+                <button class="link-button"
+                    onclick="copy_link_to_clipboard('for_each')">&#x1F517;</button>
+            </h3>
+        </div>
+        <div class="linked-heading">
+            <h4 class="subsubtitle" id="for_each_resources_list">
+                Creating resources from a list
+                <button class="link-button" onclick="copy_link_to_clipboard('for_each_resources_list')">
+                    &#x1F517;
+                </button>
+            </h4>
+        </div>
+        <div class="example-code">
+            <pre><code>variable "iterator" {
+  default = ["2", "5"]
+}
+
+resource "random_string" "for_each_example" {
+  for_each = toset(var.iterator)
+
+  length = each.value
+}
+
+output "strings_created" {
+  # Outputs a map of the string resources, keyed by var.iterator values
+  value = random_string.for_each_example
+}
+
+output "long_string_length" {
+  value = random_string.for_each_example["5"].length # Should be 5
+}
+</code></pre>
+        </div>
+        <div class="output-button">
+            <button onclick="toggle_output('for_each_resources_list_output')">Run this example</button>
+        </div>
+        <div class="example-output hidden" id="for_each_resources_list_output">
+            <pre><code class="nohighlight">
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # random_string.for_each_example["2"] will be created
+  + resource "random_string" "for_each_example" {
+      + id          = (known after apply)
+      + length      = 2
+      + lower       = true
+      + min_lower   = 0
+      + min_numeric = 0
+      + min_special = 0
+      + min_upper   = 0
+      + number      = true
+      + result      = (known after apply)
+      + special     = true
+      + upper       = true
+    }
+
+  # random_string.for_each_example["5"] will be created
+  + resource "random_string" "for_each_example" {
+      + id          = (known after apply)
+      + length      = 5
+      + lower       = true
+      + min_lower   = 0
+      + min_numeric = 0
+      + min_special = 0
+      + min_upper   = 0
+      + number      = true
+      + result      = (known after apply)
+      + special     = true
+      + upper       = true
+    }
+
+Plan: 2 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + long_string_length = 5
+  + strings_created    = {
+      + 2 = {
+          + id               = (known after apply)
+          + keepers          = null
+          + length           = 2
+          + lower            = true
+          + min_lower        = 0
+          + min_numeric      = 0
+          + min_special      = 0
+          + min_upper        = 0
+          + number           = true
+          + override_special = null
+          + result           = (known after apply)
+          + special          = true
+          + upper            = true
+        }
+      + 5 = {
+          + id               = (known after apply)
+          + keepers          = null
+          + length           = 5
+          + lower            = true
+          + min_lower        = 0
+          + min_numeric      = 0
+          + min_special      = 0
+          + min_upper        = 0
+          + number           = true
+          + override_special = null
+          + result           = (known after apply)
+          + special          = true
+          + upper            = true
+        }
+    }
+random_string.for_each_example["2"]: Creating...
+random_string.for_each_example["5"]: Creating...
+random_string.for_each_example["5"]: Creation complete after 0s [id=0VYiL]
+random_string.for_each_example["2"]: Creation complete after 0s [id=](]
+
+Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+long_string_length = 5
+strings_created = {
+  "2" = {
+    "id" = "]("
+    "keepers" = tomap(null) /* of string */
+    "length" = 2
+    "lower" = true
+    "min_lower" = 0
+    "min_numeric" = 0
+    "min_special" = 0
+    "min_upper" = 0
+    "number" = true
+    "override_special" = tostring(null)
+    "result" = "]("
+    "special" = true
+    "upper" = true
+  }
+  "5" = {
+    "id" = "0VYiL"
+    "keepers" = tomap(null) /* of string */
+    "length" = 5
+    "lower" = true
+    "min_lower" = 0
+    "min_numeric" = 0
+    "min_special" = 0
+    "min_upper" = 0
+    "number" = true
+    "override_special" = tostring(null)
+    "result" = "0VYiL"
+    "special" = true
+    "upper" = true
+  }
+}
+</code></pre>
+        </div>
+        <div class="linked-heading">
+            <h4 class="subsubtitle" id="for_each_resources_map">
+                Creating resources from a map
+                <button class="link-button" onclick="copy_link_to_clipboard('for_each_resources_map')">
+                    &#x1F517;
+                </button>
+            </h4>
+        </div>
+        <div class="example-code">
+            <pre><code>variable "pet_prefixes_and_lengths" {
+  default = {
+    "five-long" : 5,
+    "seven-long" : 7
+  }
+}
+
+resource "random_pet" "for_each_example" {
+  for_each = var.pet_prefixes_and_lengths
+
+  prefix = each.key
+  length = each.value
+}
+
+output "prefixed_pets_created" {
+  # Outputs a map of the resources, keyed by the var.pet_prefixes_and_lengths keys
+  value = random_pet.for_each_example
+}
+
+output "short_pet_length" {
+  value = random_pet.for_each_example["five-long"].length # Should be 5
+}
+</code></pre>
+        </div>
+        <div class="output-button">
+            <button onclick="toggle_output('for_each_resources_map_output')">Run this example</button>
+        </div>
+        <div class="example-output hidden" id="for_each_resources_map_output">
+            <pre><code class="nohighlight">
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # random_pet.for_each_example["five-long"] will be created
+  + resource "random_pet" "for_each_example" {
+      + id        = (known after apply)
+      + length    = 5
+      + prefix    = "five-long"
+      + separator = "-"
+    }
+
+  # random_pet.for_each_example["seven-long"] will be created
+  + resource "random_pet" "for_each_example" {
+      + id        = (known after apply)
+      + length    = 7
+      + prefix    = "seven-long"
+      + separator = "-"
+    }
+
+Plan: 2 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + prefixed_pets_created = {
+      + five-long  = {
+          + id        = (known after apply)
+          + keepers   = null
+          + length    = 5
+          + prefix    = "five-long"
+          + separator = "-"
+        }
+      + seven-long = {
+          + id        = (known after apply)
+          + keepers   = null
+          + length    = 7
+          + prefix    = "seven-long"
+          + separator = "-"
+        }
+    }
+  + short_pet_length      = 5
+random_pet.for_each_example["five-long"]: Creating...
+random_pet.for_each_example["seven-long"]: Creating...
+random_pet.for_each_example["seven-long"]: Creation complete after 0s [id=seven-long-willingly-recently-admittedly-remarkably-loosely-useful-kodiak]
+random_pet.for_each_example["five-long"]: Creation complete after 0s [id=five-long-inherently-ideally-miserably-faithful-slug]
+
+Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+prefixed_pets_created = {
+  "five-long" = {
+    "id" = "five-long-inherently-ideally-miserably-faithful-slug"
+    "keepers" = tomap(null) /* of string */
+    "length" = 5
+    "prefix" = "five-long"
+    "separator" = "-"
+  }
+  "seven-long" = {
+    "id" = "seven-long-willingly-recently-admittedly-remarkably-loosely-useful-kodiak"
+    "keepers" = tomap(null) /* of string */
+    "length" = 7
+    "prefix" = "seven-long"
+    "separator" = "-"
+  }
+}
+short_pet_length = 5
+</code></pre>
+        </div>
+        <div class="linked-heading">
+            <h4 class="subsubtitle" id="for_each_inline">
+                Creating sections within a resource
+                <button class="link-button" onclick="copy_link_to_clipboard('for_each_inline')">
+                    &#x1F517;
+                </button>
+            </h4>
+        </div>
+        <div class="example-code">
+            <pre><code>variable "zip_sources" {
+  default = {
+    first_source = {
+      source_content = "Some text in my first source"
+      filename       = "first_source.txt"
+    }
+
+    second_source = {
+      source_content = "Some text in my second source."
+      filename       = "second_source.txt"
+    }
+  }
+}
+
+data "archive_file" "inline_block_example" {
+  type        = "zip"
+  output_path = "example.zip"
+
+  # Generates two inline blocks of the form:
+  # source {
+  #   content = &lt;content&gt;
+  #   filename = &lt;filename&gt;
+  # }
+  dynamic "source" {
+    for_each = var.zip_sources
+
+    content {
+      content  = source.value["source_content"]
+      filename = source.value["filename"]
+    }
+  }
+}
+
+output "example_output" {
+  value = data.archive_file.inline_block_example
+}
+</code></pre>
+        </div>
+        <div class="output-button">
+            <button onclick="toggle_output('for_each_inline_output')">Run this example</button>
+        </div>
+        <div class="example-output hidden" id="for_each_inline_output">
+            <pre><code class="nohighlight">
+Changes to Outputs:
+  + example_output = {
+      + excludes                = null
+      + id                      = "710215cc9950fa4f3ecb07bac6df6c564b4ea920"
+      + output_base64sha256     = "yGvlJr7oIPhHBzxP5HfPu/TdkXOeGI0Ny3v0d1beInA="
+      + output_file_mode        = null
+      + output_md5              = "3b1349239b5307ba08fca2e22ad43409"
+      + output_path             = "example.zip"
+      + output_sha              = "710215cc9950fa4f3ecb07bac6df6c564b4ea920"
+      + output_size             = 342
+      + source                  = [
+          + {
+              + content  = "Some text in my first source"
+              + filename = "first_source.txt"
+            },
+          + {
+              + content  = "Some text in my second source."
+              + filename = "second_source.txt"
+            },
+        ]
+      + source_content          = null
+      + source_content_filename = null
+      + source_dir              = null
+      + source_file             = null
+      + type                    = "zip"
+    }
+
+You can apply this plan to save these new output values to the Terraform
+state, without changing any real infrastructure.
+
+Apply complete! Resources: 0 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+example_output = {
+  "excludes" = toset(null) /* of string */
+  "id" = "710215cc9950fa4f3ecb07bac6df6c564b4ea920"
+  "output_base64sha256" = "yGvlJr7oIPhHBzxP5HfPu/TdkXOeGI0Ny3v0d1beInA="
+  "output_file_mode" = tostring(null)
+  "output_md5" = "3b1349239b5307ba08fca2e22ad43409"
+  "output_path" = "example.zip"
+  "output_sha" = "710215cc9950fa4f3ecb07bac6df6c564b4ea920"
+  "output_size" = 342
+  "source" = toset([
+    {
+      "content" = "Some text in my first source"
+      "filename" = "first_source.txt"
+    },
+    {
+      "content" = "Some text in my second source."
+      "filename" = "second_source.txt"
+    },
+  ])
+  "source_content" = tostring(null)
+  "source_content_filename" = tostring(null)
+  "source_dir" = tostring(null)
+  "source_file" = tostring(null)
+  "type" = "zip"
+}
+</code></pre>
+        </div>
+        <div class="linked-heading">
+            <h3 class="subsubtitle" id="count">
+                count
+                <button class="link-button"
+                    onclick="copy_link_to_clipboard('count')">&#x1F517;</button>
+            </h3>
+        </div>
+        <div class="linked-heading">
+            <h4 class="subsubtitle" id="count_list">
+                Multiple resources from list
+                <button class="link-button" onclick="copy_link_to_clipboard('count_list')">
+                    &#x1F517;
+                </button>
+            </h4>
+        </div>
+        <div class="example-code">
+            <pre><code># Better to use for_each if you can, as count makes the resources
+# addresses less readable (e.g. random_string.count_basic[0])
+# will recreate all the resources if you remove the first one in
+# the array (as their index will have changed).
+# However, if you're hitting errors like:
+# "value depends on resource attributes that cannot be determined until apply"
+# then using count can be a good workaround
+
+variable "string_lengths" {
+  default = [2, 5, 1]
+}
+
+resource "random_string" "count_basic" {
+  count = length(var.string_lengths)
+
+  length = var.string_lengths[count.index]
+}
+</code></pre>
+        </div>
+        <div class="output-button">
+            <button onclick="toggle_output('count_list_output')">Run this example</button>
+        </div>
+        <div class="example-output hidden" id="count_list_output">
+            <pre><code class="nohighlight">
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # random_string.count_basic[0] will be created
+  + resource "random_string" "count_basic" {
+      + id          = (known after apply)
+      + length      = 2
+      + lower       = true
+      + min_lower   = 0
+      + min_numeric = 0
+      + min_special = 0
+      + min_upper   = 0
+      + number      = true
+      + result      = (known after apply)
+      + special     = true
+      + upper       = true
+    }
+
+  # random_string.count_basic[1] will be created
+  + resource "random_string" "count_basic" {
+      + id          = (known after apply)
+      + length      = 5
+      + lower       = true
+      + min_lower   = 0
+      + min_numeric = 0
+      + min_special = 0
+      + min_upper   = 0
+      + number      = true
+      + result      = (known after apply)
+      + special     = true
+      + upper       = true
+    }
+
+  # random_string.count_basic[2] will be created
+  + resource "random_string" "count_basic" {
+      + id          = (known after apply)
+      + length      = 1
+      + lower       = true
+      + min_lower   = 0
+      + min_numeric = 0
+      + min_special = 0
+      + min_upper   = 0
+      + number      = true
+      + result      = (known after apply)
+      + special     = true
+      + upper       = true
+    }
+
+Plan: 3 to add, 0 to change, 0 to destroy.
+random_string.count_basic[1]: Creating...
+random_string.count_basic[0]: Creating...
+random_string.count_basic[2]: Creating...
+random_string.count_basic[1]: Creation complete after 0s [id=D}OIw]
+random_string.count_basic[0]: Creation complete after 0s [id=5E]
+random_string.count_basic[2]: Creation complete after 0s [id=b]
+
+Apply complete! Resources: 3 added, 0 changed, 0 destroyed.
+</code></pre>
+        </div>
+        <div class="linked-heading">
+            <h4 class="subsubtitle" id="count_ternary">
+                Flagging resources on and off
+                <button class="link-button" onclick="copy_link_to_clipboard('count_ternary')">
+                    &#x1F517;
+                </button>
+            </h4>
+        </div>
+        <div class="example-code">
+            <pre><code>variable "env" {
+  default = "test"
+}
+
+resource "random_string" "test_env_only" {
+  count  = var.env == "test" ? 1 : 0
+  length = 5
+}
+
+resource "random_string" "prod_env_only" {
+  count  = var.env == "prod" ? 1 : 0
+  length = 5
+}
+
+# We need a ternary here or the terraform will fail to plan when
+# var.env != "test" because random_string.test_env_only[0] will not exist
+output "test_env_only" {
+  value = var.env == "test" ? random_string.test_env_only[0] : null
+}
+
+output "prod_env_only" {
+  value = var.env == "prod" ? random_string.prod_env_only[0] : null
+}
+</code></pre>
+        </div>
+        <div class="output-button">
+            <button onclick="toggle_output('count_ternary_output')">Run this example</button>
+        </div>
+        <div class="example-output hidden" id="count_ternary_output">
+            <pre><code class="nohighlight">
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # random_string.test_env_only[0] will be created
+  + resource "random_string" "test_env_only" {
+      + id          = (known after apply)
+      + length      = 5
+      + lower       = true
+      + min_lower   = 0
+      + min_numeric = 0
+      + min_special = 0
+      + min_upper   = 0
+      + number      = true
+      + result      = (known after apply)
+      + special     = true
+      + upper       = true
+    }
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + test_env_only = {
+      + id               = (known after apply)
+      + keepers          = null
+      + length           = 5
+      + lower            = true
+      + min_lower        = 0
+      + min_numeric      = 0
+      + min_special      = 0
+      + min_upper        = 0
+      + number           = true
+      + override_special = null
+      + result           = (known after apply)
+      + special          = true
+      + upper            = true
+    }
+random_string.test_env_only[0]: Creating...
+random_string.test_env_only[0]: Creation complete after 0s [id=TGQA8]
+
+Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+test_env_only = {
+  "id" = "TGQA8"
+  "keepers" = tomap(null) /* of string */
+  "length" = 5
+  "lower" = true
+  "min_lower" = 0
+  "min_numeric" = 0
+  "min_special" = 0
+  "min_upper" = 0
+  "number" = true
+  "override_special" = tostring(null)
+  "result" = "TGQA8"
+  "special" = true
+  "upper" = true
+}
+</code></pre>
+        </div>
+        <div class="linked-heading">
+            <h3 class="subsubtitle" id="for">
+                for
+                <button class="link-button"
+                    onclick="copy_link_to_clipboard('for')">&#x1F517;</button>
+            </h3>
+        </div>
+        <div class="linked-heading">
+            <h4 class="subsubtitle" id="for_list_iterating">
+                Iterate over lists
+                <button class="link-button" onclick="copy_link_to_clipboard('for_list_iterating')">
+                    &#x1F517;
+                </button>
+            </h4>
+        </div>
+        <div class="example-code">
+            <pre><code>variable "favourite_vegetables" {
+  default = ["Artichoke", "Broccoli", "Potato"]
+}
+
+output "vegetable_statements" {
+  value = [for veg in var.favourite_vegetables : "${veg} is great."]
+}
+</code></pre>
+        </div>
+        <div class="output-button">
+            <button onclick="toggle_output('for_list_iterating_output')">Run this example</button>
+        </div>
+        <div class="example-output hidden" id="for_list_iterating_output">
+            <pre><code class="nohighlight">
+Changes to Outputs:
+  + vegetable_statements = [
+      + "Artichoke is great.",
+      + "Broccoli is great.",
+      + "Potato is great.",
+    ]
+
+You can apply this plan to save these new output values to the Terraform
+state, without changing any real infrastructure.
+
+Apply complete! Resources: 0 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+vegetable_statements = [
+  "Artichoke is great.",
+  "Broccoli is great.",
+  "Potato is great.",
+]
+</code></pre>
+        </div>
+        <div class="linked-heading">
+            <h4 class="subsubtitle" id="for_map_iterating">
+                Iterate over maps
+                <button class="link-button" onclick="copy_link_to_clipboard('for_map_iterating')">
+                    &#x1F517;
+                </button>
+            </h4>
+        </div>
+        <div class="example-code">
+            <pre><code>variable "vegetable_opinions" {
+  default = {
+    artichoke   = "great"
+    cauliflower = "terrible"
+  }
+}
+
+output "uppercase_opinions" {
+  value = { for veg, opinion in var.vegetable_opinions : upper(veg) =&gt; upper(opinion) }
+}
+</code></pre>
+        </div>
+        <div class="output-button">
+            <button onclick="toggle_output('for_map_iterating_output')">Run this example</button>
+        </div>
+        <div class="example-output hidden" id="for_map_iterating_output">
+            <pre><code class="nohighlight">
+Changes to Outputs:
+  + uppercase_opinions = {
+      + ARTICHOKE   = "GREAT"
+      + CAULIFLOWER = "TERRIBLE"
+    }
+
+You can apply this plan to save these new output values to the Terraform
+state, without changing any real infrastructure.
+
+Apply complete! Resources: 0 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+uppercase_opinions = {
+  "ARTICHOKE" = "GREAT"
+  "CAULIFLOWER" = "TERRIBLE"
+}
+</code></pre>
+        </div>
+        <div class="linked-heading">
+            <h4 class="subsubtitle" id="for_string">
+                For loop in a string (string directive)
+                <button class="link-button" onclick="copy_link_to_clipboard('for_string')">
+                    &#x1F517;
+                </button>
+            </h4>
+        </div>
+        <div class="example-code">
+            <pre><code>variable "fruits" {
+  default = ["apple", "tangerine", "mango"]
+}
+
+output "for_within_string" {
+  # ~ character strips empty newlines and whitespace
+  value = &lt;&lt;EOF
+%{~for fruit in var.fruits}
+  ${fruit}
+%{~endfor}
+EOF
+}
+</code></pre>
+        </div>
+        <div class="output-button">
+            <button onclick="toggle_output('for_string_output')">Run this example</button>
+        </div>
+        <div class="example-output hidden" id="for_string_output">
+            <pre><code class="nohighlight">
+Changes to Outputs:
+  + for_within_string = &lt;&lt;-EOT
+
+          apple
+          tangerine
+          mango
+    EOT
+
+You can apply this plan to save these new output values to the Terraform
+state, without changing any real infrastructure.
+
+Apply complete! Resources: 0 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+for_within_string = &lt;&lt;EOT
+
+  apple
+  tangerine
+  mango
+
+EOT
+</code></pre>
+        </div>
+        <div class="linked-heading">
+            <h4 class="subsubtitle" id="for_property_iteration">
+                Get property of iterated resource
+                <button class="link-button" onclick="copy_link_to_clipboard('for_property_iteration')">
+                    &#x1F517;
+                </button>
+            </h4>
+        </div>
+        <div class="example-code">
+            <pre><code>resource "random_pet" "my_animals" {
+  count = 5
+}
+
+output "farm_register" {
+  value = [for pet in random_pet.my_animals[*] : pet.id]
+}
+</code></pre>
+        </div>
+        <div class="output-button">
+            <button onclick="toggle_output('for_property_iteration_output')">Run this example</button>
+        </div>
+        <div class="example-output hidden" id="for_property_iteration_output">
+            <pre><code class="nohighlight">
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # random_pet.my_animals[0] will be created
+  + resource "random_pet" "my_animals" {
+      + id        = (known after apply)
+      + length    = 2
+      + separator = "-"
+    }
+
+  # random_pet.my_animals[1] will be created
+  + resource "random_pet" "my_animals" {
+      + id        = (known after apply)
+      + length    = 2
+      + separator = "-"
+    }
+
+  # random_pet.my_animals[2] will be created
+  + resource "random_pet" "my_animals" {
+      + id        = (known after apply)
+      + length    = 2
+      + separator = "-"
+    }
+
+  # random_pet.my_animals[3] will be created
+  + resource "random_pet" "my_animals" {
+      + id        = (known after apply)
+      + length    = 2
+      + separator = "-"
+    }
+
+  # random_pet.my_animals[4] will be created
+  + resource "random_pet" "my_animals" {
+      + id        = (known after apply)
+      + length    = 2
+      + separator = "-"
+    }
+
+Plan: 5 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + farm_register = [
+      + (known after apply),
+      + (known after apply),
+      + (known after apply),
+      + (known after apply),
+      + (known after apply),
+    ]
+random_pet.my_animals[3]: Creating...
+random_pet.my_animals[1]: Creating...
+random_pet.my_animals[2]: Creating...
+random_pet.my_animals[4]: Creating...
+random_pet.my_animals[0]: Creating...
+random_pet.my_animals[3]: Creation complete after 0s [id=select-cardinal]
+random_pet.my_animals[2]: Creation complete after 0s [id=assured-lobster]
+random_pet.my_animals[0]: Creation complete after 0s [id=modern-bobcat]
+random_pet.my_animals[4]: Creation complete after 0s [id=crisp-liger]
+random_pet.my_animals[1]: Creation complete after 0s [id=workable-mammal]
+
+Apply complete! Resources: 5 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+farm_register = [
+  "modern-bobcat",
+  "workable-mammal",
+  "assured-lobster",
+  "select-cardinal",
+  "crisp-liger",
+]
+</code></pre>
+        </div>
+        <div class="linked-heading">
+            <h3 class="subsubtitle" id="wildcard">
+                Wildcard to reference all resources created (splat)
+                <button class="link-button"
+                    onclick="copy_link_to_clipboard('wildcard')">&#x1F517;</button>
+            </h3>
+        </div>
+        <div class="linked-heading">
+            <h4 class="subsubtitle" id="created_using_count">
+                Created using count
+                <button class="link-button" onclick="copy_link_to_clipboard('created_using_count')">
+                    &#x1F517;
+                </button>
+            </h4>
+        </div>
+        <div class="example-code">
+            <pre><code>variable "string_lengths" {
+  default = [2, 5, 1]
+}
+
+resource "random_string" "splat_count" {
+  count = length(var.string_lengths)
+
+  length = var.string_lengths[count.index]
+}
+
+output "all_random_strings_created" {
+  # Outputs a list of all the random_strings created
+  value = random_string.splat_count[*].result
+}
+</code></pre>
+        </div>
+        <div class="output-button">
+            <button onclick="toggle_output('created_using_count_output')">Run this example</button>
+        </div>
+        <div class="example-output hidden" id="created_using_count_output">
+            <pre><code class="nohighlight">
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # random_string.splat_count[0] will be created
+  + resource "random_string" "splat_count" {
+      + id          = (known after apply)
+      + length      = 2
+      + lower       = true
+      + min_lower   = 0
+      + min_numeric = 0
+      + min_special = 0
+      + min_upper   = 0
+      + number      = true
+      + result      = (known after apply)
+      + special     = true
+      + upper       = true
+    }
+
+  # random_string.splat_count[1] will be created
+  + resource "random_string" "splat_count" {
+      + id          = (known after apply)
+      + length      = 5
+      + lower       = true
+      + min_lower   = 0
+      + min_numeric = 0
+      + min_special = 0
+      + min_upper   = 0
+      + number      = true
+      + result      = (known after apply)
+      + special     = true
+      + upper       = true
+    }
+
+  # random_string.splat_count[2] will be created
+  + resource "random_string" "splat_count" {
+      + id          = (known after apply)
+      + length      = 1
+      + lower       = true
+      + min_lower   = 0
+      + min_numeric = 0
+      + min_special = 0
+      + min_upper   = 0
+      + number      = true
+      + result      = (known after apply)
+      + special     = true
+      + upper       = true
+    }
+
+Plan: 3 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + all_random_strings_created = [
+      + (known after apply),
+      + (known after apply),
+      + (known after apply),
+    ]
+random_string.splat_count[0]: Creating...
+random_string.splat_count[1]: Creating...
+random_string.splat_count[2]: Creating...
+random_string.splat_count[1]: Creation complete after 0s [id=9Tw2M]
+random_string.splat_count[2]: Creation complete after 0s [id=e]
+random_string.splat_count[0]: Creation complete after 0s [id=0{]
+
+Apply complete! Resources: 3 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+all_random_strings_created = [
+  "0{",
+  "9Tw2M",
+  "e",
+]
+</code></pre>
+        </div>
+        <div class="linked-heading">
+            <h4 class="subsubtitle" id="created_using_for_each">
+                Created using for_each
+                <button class="link-button" onclick="copy_link_to_clipboard('created_using_for_each')">
+                    &#x1F517;
+                </button>
+            </h4>
+        </div>
+        <div class="example-code">
+            <pre><code>variable "iterator" {
+  default = ["2", "5"]
+}
+
+resource "random_string" "for_each_splat" {
+  for_each = toset(var.iterator)
+
+  length = each.value
+}
+
+output "map_of_resources_created" {
+  value = random_string.for_each_splat[*]
+}
+</code></pre>
+        </div>
+        <div class="output-button">
+            <button onclick="toggle_output('created_using_for_each_output')">Run this example</button>
+        </div>
+        <div class="example-output hidden" id="created_using_for_each_output">
+            <pre><code class="nohighlight">
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # random_string.for_each_splat["2"] will be created
+  + resource "random_string" "for_each_splat" {
+      + id          = (known after apply)
+      + length      = 2
+      + lower       = true
+      + min_lower   = 0
+      + min_numeric = 0
+      + min_special = 0
+      + min_upper   = 0
+      + number      = true
+      + result      = (known after apply)
+      + special     = true
+      + upper       = true
+    }
+
+  # random_string.for_each_splat["5"] will be created
+  + resource "random_string" "for_each_splat" {
+      + id          = (known after apply)
+      + length      = 5
+      + lower       = true
+      + min_lower   = 0
+      + min_numeric = 0
+      + min_special = 0
+      + min_upper   = 0
+      + number      = true
+      + result      = (known after apply)
+      + special     = true
+      + upper       = true
+    }
+
+Plan: 2 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + map_of_resources_created = [
+      + {
+          + 2 = {
+              + id               = (known after apply)
+              + keepers          = null
+              + length           = 2
+              + lower            = true
+              + min_lower        = 0
+              + min_numeric      = 0
+              + min_special      = 0
+              + min_upper        = 0
+              + number           = true
+              + override_special = null
+              + result           = (known after apply)
+              + special          = true
+              + upper            = true
+            }
+          + 5 = {
+              + id               = (known after apply)
+              + keepers          = null
+              + length           = 5
+              + lower            = true
+              + min_lower        = 0
+              + min_numeric      = 0
+              + min_special      = 0
+              + min_upper        = 0
+              + number           = true
+              + override_special = null
+              + result           = (known after apply)
+              + special          = true
+              + upper            = true
+            }
+        },
+    ]
+random_string.for_each_splat["2"]: Creating...
+random_string.for_each_splat["5"]: Creating...
+random_string.for_each_splat["5"]: Creation complete after 0s [id=(6%0$]
+random_string.for_each_splat["2"]: Creation complete after 0s [id=:_]
+
+Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+map_of_resources_created = [
+  {
+    "2" = {
+      "id" = ":_"
+      "keepers" = tomap(null) /* of string */
+      "length" = 2
+      "lower" = true
+      "min_lower" = 0
+      "min_numeric" = 0
+      "min_special" = 0
+      "min_upper" = 0
+      "number" = true
+      "override_special" = tostring(null)
+      "result" = ":_"
+      "special" = true
+      "upper" = true
+    }
+    "5" = {
+      "id" = "(6%0$"
+      "keepers" = tomap(null) /* of string */
+      "length" = 5
+      "lower" = true
+      "min_lower" = 0
+      "min_numeric" = 0
+      "min_special" = 0
+      "min_upper" = 0
+      "number" = true
+      "override_special" = tostring(null)
+      "result" = "(6%0$"
+      "special" = true
+      "upper" = true
+    }
+  },
+]
+</code></pre>
+        </div>
+        <div class="linked-heading">
+            <h2 class="subtitle" id="ternary">
+                Ternary
+                <button class="link-button" onclick="copy_link_to_clipboard('ternary')">&#x1F517;</button>
+            </h2>
+        </div>
+        <div class="example-code">
+            <pre><code># Very useful for varying resources by environment
+
+variable "env" {
+  default = "prod"
+}
+
+resource "random_string" "longer_in_prod" {
+  length = var.env == "prod" ? 5 : 3
+}
+
+output "string_produced" {
+  # Will be 5 characters long
+  value = random_string.longer_in_prod.result
+}
+</code></pre>
+        </div>
+        <div class="output-button">
+            <button onclick="toggle_output('ternary_output')">Run this example</button>
+        </div>
+        <div class="example-output hidden" id="ternary_output">
+            <pre><code class="nohighlight">
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # random_string.longer_in_prod will be created
+  + resource "random_string" "longer_in_prod" {
+      + id          = (known after apply)
+      + length      = 5
+      + lower       = true
+      + min_lower   = 0
+      + min_numeric = 0
+      + min_special = 0
+      + min_upper   = 0
+      + number      = true
+      + result      = (known after apply)
+      + special     = true
+      + upper       = true
+    }
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + string_produced = (known after apply)
+random_string.longer_in_prod: Creating...
+random_string.longer_in_prod: Creation complete after 0s [id=!%CZh]
+
+Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+string_produced = "!%CZh"
+</code></pre>
+        </div>
+        <div class="linked-heading">
+            <h2 class="subtitle" id="module_path">
+                Path to terraform directory
+                <button class="link-button" onclick="copy_link_to_clipboard('module_path')">&#x1F517;</button>
+            </h2>
+        </div>
+        <div class="example-code">
+            <pre><code># This gives the path of the terraform running relative to the directory
+# in which the entry terraform was run.
+# This example is being run directly, rather than called in a module, so it returns '.'
+# path.module is useful when creating and referencing files in a module
+
+output "entry_terraform_path" {
+  value = path.module
+}
+</code></pre>
+        </div>
+        <div class="output-button">
+            <button onclick="toggle_output('module_path_output')">Run this example</button>
+        </div>
+        <div class="example-output hidden" id="module_path_output">
+            <pre><code class="nohighlight">
+Changes to Outputs:
+  + entry_terraform_path = "."
+
+You can apply this plan to save these new output values to the Terraform
+state, without changing any real infrastructure.
+
+Apply complete! Resources: 0 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+entry_terraform_path = "."
+</code></pre>
+        </div>
+        <div class="linked-heading">
+            <h2 class="subtitle" id="var_templating">
+                Variable templating (string interpolation)
+                <button class="link-button" onclick="copy_link_to_clipboard('var_templating')">&#x1F517;</button>
+            </h2>
+        </div>
+        <div class="example-code">
+            <pre><code># If the value you're interpolating is part of a resource
+# then Terraform will infer the dependency between the two -
+# it won't try to build the resource containing the interpolation
+# until it has built the referenced resource.
+
+resource "random_string" "insertion" {
+  length = 7
+}
+
+locals {
+  my_string = "Random string value is ${random_string.insertion.result}"
+}
+
+output "my_string" {
+  value = local.my_string
+}
+</code></pre>
+        </div>
+        <div class="output-button">
+            <button onclick="toggle_output('var_templating_output')">Run this example</button>
+        </div>
+        <div class="example-output hidden" id="var_templating_output">
+            <pre><code class="nohighlight">
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # random_string.insertion will be created
+  + resource "random_string" "insertion" {
+      + id          = (known after apply)
+      + length      = 7
+      + lower       = true
+      + min_lower   = 0
+      + min_numeric = 0
+      + min_special = 0
+      + min_upper   = 0
+      + number      = true
+      + result      = (known after apply)
+      + special     = true
+      + upper       = true
+    }
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + my_string = (known after apply)
+random_string.insertion: Creating...
+random_string.insertion: Creation complete after 0s [id=1M}=V8w]
+
+Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+my_string = "Random string value is 1M}=V8w"
+</code></pre>
+        </div>
+        <div class="linked-heading">
+            <h2 class="subtitle" id="json_encode">
+                JSON encoding
+                <button class="link-button" onclick="copy_link_to_clipboard('json_encode')">&#x1F517;</button>
+            </h2>
+        </div>
+        <div class="example-code">
+            <pre><code># Particularly useful when working with the
+# AWS provider, as it makes IAM policy writing neater
+
+output "example_json_policy" {
+  value = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = [
+          "ec2:Describe*",
+        ]
+        Effect   = "Allow"
+        Resource = "*"
+      },
+    ]
+  })
+}
+</code></pre>
+        </div>
+        <div class="output-button">
+            <button onclick="toggle_output('json_encode_output')">Run this example</button>
+        </div>
+        <div class="example-output hidden" id="json_encode_output">
+            <pre><code class="nohighlight">
+Changes to Outputs:
+  + example_json_policy = jsonencode(
+        {
+          + Statement = [
+              + {
+                  + Action   = [
+                      + "ec2:Describe*",
+                    ]
+                  + Effect   = "Allow"
+                  + Resource = "*"
+                },
+            ]
+          + Version   = "2012-10-17"
+        }
+    )
+
+You can apply this plan to save these new output values to the Terraform
+state, without changing any real infrastructure.
+
+Apply complete! Resources: 0 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+example_json_policy = "{\"Statement\":[{\"Action\":[\"ec2:Describe*\"],\"Effect\":\"Allow\",\"Resource\":\"*\"}],\"Version\":\"2012-10-17\"}"
+</code></pre>
+        </div>
+        <div class="linked-heading">
+            <h2 class="subtitle" id="variable_validation">
+                Variable validation
+                <button class="link-button" onclick="copy_link_to_clipboard('variable_validation')">&#x1F517;</button>
+            </h2>
+        </div>
+        <div class="linked-heading">
+            <h3 class="subsubtitle" id="basic_validation">
+                Basic validation
+                <button class="link-button"
+                    onclick="copy_link_to_clipboard('basic_validation')">&#x1F517;</button>
+            </h3>
+        </div>
+        <div class="example-code">
+            <pre><code>variable "sauce_for_roast_lamb" {
+  description = "Which sauce to serve with roast lamb. Options are mint or redcurrant jelly."
+  type = string
+  # Variable validation gives you a faster feedback loop as invalid variables will
+  # fail at plan rather than apply (and will not create incorrect resources). It also reduces
+  # errors if your modules is being used by third parties.
+  validation {
+      # Only the variable being validated can be referenced in the condition,
+      # no other variables, resources or locals can be referenced
+      condition = (var.sauce_for_roast_lamb == "mint" ||
+                   var.sauce_for_roast_lamb == "redcurrant jelly")
+      # Terraform is very opinionated about this error message and will fail if
+      # it doesn't begin with a capital letter and end with a full stop.
+      error_message = "The sauce must be either mint or redcurrant jelly."
+  }
+}
+</code></pre>
+        </div>
+        <div class="linked-heading">
+            <h3 class="subsubtitle" id="regex_list_validation">
+                Check strings in list match regex
+                <button class="link-button"
+                    onclick="copy_link_to_clipboard('regex_list_validation')">&#x1F517;</button>
+            </h3>
+        </div>
+        <div class="example-code">
+            <pre><code>variable "formatted_first_names" {
+  description = "List of first names, formatted with an initial capital letter."
+  default = ["A", "Bar"]
+  type = list(string)
+  validation {
+      # Checks that all strings in var.formatted_first_names match the regex
+      condition = alltrue([for name in var.formatted_first_names: length(regexall("[A-Z][a-z]*", name)) &gt; 0])
+      error_message = "Names in the list must begin with a capital letter and otherwise be lowercase alphabetic characters."
+  }
+}
+</code></pre>
+        </div>
+        <div class="linked-heading">
+            <h2 class="subtitle" id="modules">
+                Modules
+                <button class="link-button" onclick="copy_link_to_clipboard('modules')">&#x1F517;</button>
+            </h2>
+        </div>
+        <div class="linked-heading">
+            <h3 class="subsubtitle" id="create_module">
+                Creating a module
+                <button class="link-button"
+                    onclick="copy_link_to_clipboard('create_module')">&#x1F517;</button>
+            </h3>
+        </div>
+        <div class="example-code">
+            <pre><code># You may notice this module looks like a normal piece of terraform configuration.
+# That's because it is: modules are just terraform configurations in a
+# different directory
+
+terraform {
+  required_providers {
+    random = {
+      source = "hashicorp/random"
+    }
+  }
+  required_version = "&gt; 0.15"
+}
+
+# Variables aren't required for a module but allow users of the module to
+# parameterise what the module creates
+variable "example_string_length" {
+  description = "The length of string to create in this module."
+  type        = number
+  default     = 5
+}
+
+resource "random_string" "example_string" {
+  length = var.example_string_length
+}
+
+# Outputs aren't required for a module but allows the module
+# to pass values back to the calling terraform
+output "example_string_value" {
+  value = random_string.example_string.result
+}
+</code></pre>
+        </div>
+        <div class="linked-heading">
+            <h3 class="subsubtitle" id="reference_module">
+                Referencing a module
+                <button class="link-button"
+                    onclick="copy_link_to_clipboard('reference_module')">&#x1F517;</button>
+            </h3>
+        </div>
+        <div class="example-code">
+            <pre><code>module "example_string" {
+  # Path to module relative to running terraform. './' is required
+  # if first element of path is in the same directory.
+  # This module is in a directory called example_module
+  # located in the same directory as this terraform
+  source = "./example_module"
+
+  example_string_length = 10
+}
+</code></pre>
+        </div>
+        <div class="output-button">
+            <button onclick="toggle_output('reference_module_output')">Run this example</button>
+        </div>
+        <div class="example-output hidden" id="reference_module_output">
+            <pre><code class="nohighlight">
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # module.example_string.random_string.example_string will be created
+  + resource "random_string" "example_string" {
+      + id          = (known after apply)
+      + length      = 10
+      + lower       = true
+      + min_lower   = 0
+      + min_numeric = 0
+      + min_special = 0
+      + min_upper   = 0
+      + number      = true
+      + result      = (known after apply)
+      + special     = true
+      + upper       = true
+    }
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+module.example_string.random_string.example_string: Creating...
+module.example_string.random_string.example_string: Creation complete after 0s [id=pz8@JCo**)]
+
+Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
+</code></pre>
+        </div>
+        <div class="linked-heading">
+            <h4 class="subsubtitle" id="module_with_git">
+                Module in Github
+                <button class="link-button" onclick="copy_link_to_clipboard('module_with_git')">
+                    &#x1F517;
+                </button>
+            </h4>
+        </div>
+        <div class="example-code">
+            <pre><code>module "example_string" {
+  source = "github.com/enicholson125/terraform-cheatsheet.git//example_module"
+
+  example_string_length = 10
+}
+</code></pre>
+        </div>
+        <div class="output-button">
+            <button onclick="toggle_output('module_with_git_output')">Run this example</button>
+        </div>
+        <div class="example-output hidden" id="module_with_git_output">
+            <pre><code class="nohighlight">
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # module.example_string.random_string.example_string will be created
+  + resource "random_string" "example_string" {
+      + id          = (known after apply)
+      + length      = 10
+      + lower       = true
+      + min_lower   = 0
+      + min_numeric = 0
+      + min_special = 0
+      + min_upper   = 0
+      + number      = true
+      + result      = (known after apply)
+      + special     = true
+      + upper       = true
+    }
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+module.example_string.random_string.example_string: Creating...
+module.example_string.random_string.example_string: Creation complete after 0s [id=2]wQlMUJh-]
+
+Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
+</code></pre>
+        </div>
+        <div class="linked-heading">
+            <h4 class="subsubtitle" id="module_with_git_commit">
+                Module in Github - specific commit
+                <button class="link-button" onclick="copy_link_to_clipboard('module_with_git_commit')">
+                    &#x1F517;
+                </button>
+            </h4>
+        </div>
+        <div class="example-code">
+            <pre><code>module "example_string" {
+  # Use specifically the version of the module present in the
+  # 085ac8443aae62fbe85a21d2abff88464d750e39 commit version in the repo
+  source = "github.com/enicholson125/terraform-cheatsheet.git//example_module?ref=72d9d56"
+
+  example_string_length = 10
+}
+</code></pre>
+        </div>
+        <div class="output-button">
+            <button onclick="toggle_output('module_with_git_commit_output')">Run this example</button>
+        </div>
+        <div class="example-output hidden" id="module_with_git_commit_output">
+            <pre><code class="nohighlight">
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # module.example_string.random_string.example_string will be created
+  + resource "random_string" "example_string" {
+      + id          = (known after apply)
+      + length      = 10
+      + lower       = true
+      + min_lower   = 0
+      + min_numeric = 0
+      + min_special = 0
+      + min_upper   = 0
+      + number      = true
+      + result      = (known after apply)
+      + special     = true
+      + upper       = true
+    }
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+module.example_string.random_string.example_string: Creating...
+module.example_string.random_string.example_string: Creation complete after 0s [id=-qUubC5Rzx]
+
+Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
+</code></pre>
+        </div>
+        <div class="linked-heading">
+            <h3 class="subsubtitle" id="module_outputs">
+                Getting module outputs
+                <button class="link-button"
+                    onclick="copy_link_to_clipboard('module_outputs')">&#x1F517;</button>
+            </h3>
+        </div>
+        <div class="example-code">
+            <pre><code>module "example_string" {
+  source = "./example_module"
+
+  example_string_length = 10
+}
+
+output "example_module_output" {
+  # This prints the example_string_value output defined in the
+  # example_string module. You can only reference outputs defined
+  # by a module, you cannot directly reference resources in them
+  value = module.example_string.example_string_value
+}
+</code></pre>
+        </div>
+        <div class="output-button">
+            <button onclick="toggle_output('module_outputs_output')">Run this example</button>
+        </div>
+        <div class="example-output hidden" id="module_outputs_output">
+            <pre><code class="nohighlight">
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # module.example_string.random_string.example_string will be created
+  + resource "random_string" "example_string" {
+      + id          = (known after apply)
+      + length      = 10
+      + lower       = true
+      + min_lower   = 0
+      + min_numeric = 0
+      + min_special = 0
+      + min_upper   = 0
+      + number      = true
+      + result      = (known after apply)
+      + special     = true
+      + upper       = true
+    }
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + example_module_output = (known after apply)
+module.example_string.random_string.example_string: Creating...
+module.example_string.random_string.example_string: Creation complete after 0s [id=$#?&gt;&gt;Xy*?f]
+
+Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+example_module_output = "$#?&gt;&gt;Xy*?f"
+</code></pre>
+        </div>
+        <div class="linked-heading">
+            <h2 class="subtitle" id="version_constraints">
+                Version Constraints
+                <button class="link-button" onclick="copy_link_to_clipboard('version_constraints')">&#x1F517;</button>
+            </h2>
+        </div>
+        <div class="linked-heading">
+            <h3 class="subsubtitle" id="version_strict">
+                Version exactly equal to
+                <button class="link-button"
+                    onclick="copy_link_to_clipboard('version_strict')">&#x1F517;</button>
+            </h3>
+        </div>
+        <div class="example-code">
+            <pre><code># This specifies that the only allowed Terraform version for this
+# config is 0.15.5
+
+terraform {
+  required_version = "0.15.5"
+}
+</code></pre>
+        </div>
+        <div class="linked-heading">
+            <h3 class="subsubtitle" id="version_approx">
+                Version approximately equal to
+                <button class="link-button"
+                    onclick="copy_link_to_clipboard('version_approx')">&#x1F517;</button>
+            </h3>
+        </div>
+        <div class="example-code">
+            <pre><code># This allows the right-most number specified to increment
+# so would allow 0.15.1 and 0.15.5 but not 0.15.0
+
+terraform {
+  required_version = "~&gt; 0.15.1"
+}
+</code></pre>
+        </div>
+        <div class="linked-heading">
+            <h3 class="subsubtitle" id="version_greater">
+                Version greater than
+                <button class="link-button"
+                    onclick="copy_link_to_clipboard('version_greater')">&#x1F517;</button>
+            </h3>
+        </div>
+        <div class="example-code">
+            <pre><code># This allows versions equal to or greater than 0.15.1
+
+terraform {
+  required_version = "&gt;= 0.15.1"
+}
+</code></pre>
+        </div>
+        <div class="linked-heading">
+            <h3 class="subsubtitle" id="version_combo">
+                Combining version constraints
+                <button class="link-button"
+                    onclick="copy_link_to_clipboard('version_combo')">&#x1F517;</button>
+            </h3>
+        </div>
+        <div class="example-code">
+            <pre><code># You can combine version constraints. For example, this
+# configuration requires a terraform version greater than
+# 0.15.0 but less than or equal to 0.15.5, excluding 0.15.3
+
+terraform {
+  required_version = "&gt; 0.15.0, &lt;= 0.15.5, != 0.15.3"
+}
+</code></pre>
+        </div>
+
+        <script>
+            function toggle_output(element_id) {
+                var outputButton = document.getElementById(element_id);
+                outputButton.classList.toggle("hidden");
+            }
+        </script>
+        <script>
+            function copy_link_to_clipboard(element_id) {
+                navigator.clipboard.writeText("https://terraform-cheatsheet.uk#" + element_id);
+            }
+        </script>
+    </div>
+
+    <div class="paper container footnote">
+        <div class="footnote-link">
+            Styled with the excellent <a href="https://www.getpapercss.com/">Paper CSS</a> framework
+        </div>
+        <div class="footnote-link">
+            Code for the cheatsheet at <a
+                href="https://github.com/enicholson125/terraform-cheatsheet">github.com/enicholson125/terraform-cheatsheet</a>
+        </div>
+    </div>
+</body>
+
+</html>
